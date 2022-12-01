@@ -1,14 +1,23 @@
 const express = require('express');
 
-const userController = require('../controllers/userController');
-const authController = require('../controllers/authController');
+const userController = require('./../controllers/userController');
+const { protect } = require('./../controllers/authController');
 
 const router = express.Router();
 
-// Register
-router.post('/register', authController.register);
+router.use(protect);
 
-// Log in
-router.post('/login', authController.login);
+// Update user data
+router.patch('/update-data', userController.updateData);
+
+// Follow
+
+// Unfollow
+
+// Add friend
+
+// Unfriend
+
+// Get friends list
 
 module.exports = router;
