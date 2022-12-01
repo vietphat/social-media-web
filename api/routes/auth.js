@@ -14,7 +14,11 @@ router.post('/signin', authController.signin);
 router.get('/signout', authController.signout);
 
 // Change password
-router.patch('/change-password', authController.changePassword);
+router.patch(
+  '/change-password',
+  authController.protect,
+  authController.changePassword
+);
 
 // Forgot password
 router.post('/forgot-password', authController.forgotPassword);

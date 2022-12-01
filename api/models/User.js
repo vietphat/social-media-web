@@ -36,6 +36,9 @@ const userSchema = new mongoose.Schema(
       type: String,
       select: false,
     },
+    resetPasswordTokenExpiresIn: {
+      type: Date,
+    },
     // Thông tin cá nhân
     username: {
       type: String,
@@ -136,6 +139,7 @@ userSchema.methods.createResetPasswordToken = function () {
     .update(resetPasswordToken)
     .digest('hex');
 
+  // token sẽ chỉ có hiệu lực trong 10 phút
   this.resetPasswordTokenExpiresIn = Date.now() + 10 * 60 * 1000;
 
   return resetPasswordToken;

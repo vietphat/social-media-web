@@ -132,22 +132,96 @@ exports.protect = catchAsync(async (req, res, next) => {
 });
 
 // Change password
-exports.changePassword = async (req, res, next) => {
-  res.status(200).json({
-    message: 'hello from register controller',
-  });
-};
+exports.changePassword = catchAsync(async (req, res, next) => {
+  const { currentPassword, password, confirmPassword } = req.body;
+  const user = await User.findOne({ email: req.user.email }).select('password');
+
+  if (!(await user.enteredPasswordIsCorrect(currentPassword, user.password))) {
+    return next(new AppError('Mật khẩu không chính xác', 401));
+  }
+
+  user.password = password;
+  user.confirmPassword = confirmPassword;
+  await user.save();
+
+  createAndSendToken(user, res, req, 200);
+});
 
 // Forgot password
-exports.forgotPassword = async (req, res, next) => {
-  res.status(200).json({
-    message: 'hello from register controller',
-  });
-};
+exports.forgotPassword = catchAsync(async (req, res, next) => {
+  const { email } = req.body;
+  // 1. Lấy thông tin user thông qua email
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    return next(new AppError('Không tìm thấy tài khoản', 400));
+  }
+
+  // 2. Tạo reset password token
+  const resetPasswordToken = user.createResetPasswordToken();
+  await user.save({ validateBeforeSave: false });
+
+  // 3. Gửi reset password token to email của người dùng
+  try {
+    const resetPasswordUrl = `${req.protocol}://${req.get(
+      'host'
+    )}/reset-password/${resetPasswordToken}`;
+
+    // await new Email(user, resetPasswordUrl).sendResetPassword();
+
+    // 4. Response
+    res.status(200).json({
+      status: 'Thành công',
+      resetPasswordUrl, // tạm thời
+      message: 'Đã gửi email thay đổi mật khẩu đến người dùng',
+    });
+  } catch (err) {
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+    await user.save({ validateBeforeSave: false });
+
+    console.log(err);
+
+    res.status(500).json({
+      status: 'Có lỗi',
+      message: 'Không thể gửi email đến người dùng',
+    });
+  }
+});
 
 // Reset password
-exports.resetPassword = async (req, res, next) => {
-  res.status(200).json({
-    message: 'hello from register controller',
+exports.resetPassword = catchAsync(async (req, res, next) => {
+  // Lấy và hash resetPasswordToken
+  let { resetPasswordToken } = req.params;
+  resetPasswordToken = crypto
+    .createHash('sha256')
+    .update(resetPasswordToken)
+    .digest('hex');
+
+  // Lấy user thông qua resetPasswordToken
+  const user = await User.findOne({
+    resetPasswordToken,
+    resetPasswordTokenExpiresIn: { $gt: Date.now() },
   });
-};
+
+  // Kiểm tra xem reset password token có chính xác và còn hạn sử dụng hay không
+  if (!user) {
+    return next(
+      new AppError(
+        'Reset password token không chính xác hoặc đã hết thời gian hiệu lực',
+        401
+      )
+    );
+  }
+
+  // Lưu mật khẩu mới
+  const { password, confirmPassword } = req.body;
+  user.password = password;
+  user.confirmPassword = confirmPassword;
+  user.resetPasswordToken = undefined;
+  user.resetPasswordTokenExpiresIn = undefined;
+  await user.save();
+
+  // Log the user in
+  createAndSendToken(user, res, req, 200);
+});

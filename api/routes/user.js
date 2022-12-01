@@ -1,14 +1,22 @@
 const express = require('express');
 
 const userController = require('./../controllers/userController');
-const { protect } = require('./../controllers/authController');
+const authController = require('./../controllers/authController');
 
 const router = express.Router();
 
-router.use(protect);
+// Get a user
+router.get('/:userId', userController.getUser);
 
-// Update user data
-router.patch('/update-data', userController.updateData);
+router.use(authController.protect);
+
+// Update user informations
+router.patch(
+  '/update-informations',
+  userController.uploadImages,
+  userController.processImages,
+  userController.updateInformations
+);
 
 // Follow
 
