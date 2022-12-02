@@ -60,16 +60,49 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: '',
     },
-    friends: {
-      type: Array,
-      default: [],
-    },
     followers: {
-      type: Array,
+      type: [
+        {
+          type: mongoose.Schema.ObjectId,
+          ref: 'User',
+        },
+      ],
       default: [],
     },
     following: {
-      type: Array,
+      type: [
+        {
+          type: mongoose.Schema.ObjectId,
+          ref: 'User',
+        },
+      ],
+      default: [],
+    },
+    friendsList: {
+      type: [
+        {
+          type: mongoose.Schema.ObjectId,
+          ref: 'User',
+        },
+      ],
+      default: [],
+    },
+    friendRequestsSent: {
+      type: [
+        {
+          type: mongoose.Schema.ObjectId,
+          ref: 'User',
+        },
+      ],
+      default: [],
+    },
+    friendRequestsReceived: {
+      type: [
+        {
+          type: mongoose.Schema.ObjectId,
+          ref: 'User',
+        },
+      ],
       default: [],
     },
     // likedPosts: {

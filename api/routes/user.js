@@ -19,13 +19,39 @@ router.patch(
 );
 
 // Follow
+router.patch('/follow/:followedUserId', userController.follow);
 
 // Unfollow
+router.patch('/unfollow/:unfollowedUserId', userController.unfollow);
 
-// Add friend
+// Send friend request
+router.patch(
+  '/send-friend-request/:receivedUserId',
+  userController.sendFriendRequest
+);
+
+// Cancel friend request
+router.patch(
+  '/cancel-friend-request/:receivedUserId',
+  userController.cancelFriendRequest
+);
+
+// Accept friend request
+router.patch(
+  '/accept-friend-request/:acceptedUserId',
+  userController.acceptFriendRequest
+);
+
+// Decline friend request
+router.patch(
+  '/decline-friend-request/:declinedUserId',
+  userController.declineFriendRequest
+);
 
 // Unfriend
+router.patch('/unfriend/:unfriendedUserId', userController.unfriend);
 
 // Get friends list
+router.get('/friends-list', userController.unfollow);
 
 module.exports = router;

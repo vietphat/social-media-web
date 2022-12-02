@@ -70,6 +70,10 @@ exports.signin = catchAsync(async (req, res, next) => {
   // 2. Lấy user trong db qua email
   const user = await User.findOne({ email }).select('+password');
 
+  if (!user) {
+    return next(new AppError('Tài khoản hoặc mật khẩu chưa chính xác', 401));
+  }
+
   // 3. Kiểm tra mật khẩu có chính xác hay không
   if (!(await user.enteredPasswordIsCorrect(password, user.password))) {
     return next(new AppError('Tài khoản hoặc mật khẩu chưa chính xác', 401));
