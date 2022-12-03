@@ -11,12 +11,7 @@ router.get('/:userId', userController.getUser);
 router.use(authController.protect);
 
 // Update user informations
-router.patch(
-  '/update-informations',
-  userController.uploadImages,
-  userController.processImages,
-  userController.updateInformations
-);
+router.patch('/update-informations', userController.updateInformations);
 
 // Follow
 router.patch('/follow/:followedUserId', userController.follow);
@@ -50,8 +45,5 @@ router.patch(
 
 // Unfriend
 router.patch('/unfriend/:unfriendedUserId', userController.unfriend);
-
-// Get friends list
-router.get('/friends-list', userController.unfollow);
 
 module.exports = router;

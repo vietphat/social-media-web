@@ -44,11 +44,11 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Tên người dùng là bắt buộc'],
     },
-    avatar: {
+    avatarUrl: {
       type: String,
       default: 'default-avatar.jpg',
     },
-    coverImage: {
+    coverImageUrl: {
       type: String,
       default: 'default-cover-image.jpg',
     },

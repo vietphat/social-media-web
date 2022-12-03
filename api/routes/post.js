@@ -19,8 +19,8 @@ router.delete('/delete/:postId', postController.deletePost);
 // like a post
 router.patch('/like/:postId', postController.likePost);
 
-// dislike a post
-router.patch('/like/:postId', postController.dislikePost);
+// unlike a post
+router.patch('/like/:postId', postController.unlikePost);
 
 // get a post
 router.get('/get/:postId', postController.getPost);

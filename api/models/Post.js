@@ -4,24 +4,38 @@ const postSchema = new mongoose.Schema(
   {
     createdBy: {
       type: mongoose.Schema.ObjectId,
-      require: true,
+      required: true,
     },
     description: {
       type: String,
-      default: '',
     },
-    images: {
+    imageUrls: {
       type: Array,
-      default: [],
     },
-    video: {
-      type: String,
-      default: '',
+    videoUrls: {
+      type: Array,
+    },
+    likes: {
+      type: [
+        {
+          type: mongoose.Schema.ObjectId,
+          ref: 'User',
+        },
+      ],
+      default: [],
     },
     postType: {
       type: String,
       enum: {
-        values: ['d', 'i', 'v', 'di', 'dv'],
+        values: [
+          'desciption_only',
+          'image_only',
+          'video_only',
+          'description_image',
+          'description_video',
+          'image_video',
+          'all',
+        ],
       },
     },
   },

@@ -21,6 +21,18 @@ mongoose
   .then(() => console.log('Kết nối đến database thành công!'));
 
 // Chạy server
-app.listen(process.env.PORT || 3300, () => {
-  console.log('Server đang chạy trên cổng 8800!');
+const port = process.env?.PORT || 3300;
+const server = app.listen(port, () => {
+  console.log(`Server đang chạy trên cổng ${port}!`);
+});
+
+process.on('unhandledRejection', (err) => {
+  console.log('UNHANDLED REJECTIONS 💥, Shutting down...');
+  console.log(`Error name: `, err.name);
+  console.log(`Error message: `, err.message);
+  console.log(`Error stack: `, err.stack);
+
+  server.close(() => {
+    process.exit(1);
+  });
 });
