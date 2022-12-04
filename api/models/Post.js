@@ -4,16 +4,15 @@ const postSchema = new mongoose.Schema(
   {
     createdBy: {
       type: mongoose.Schema.ObjectId,
+      ref: 'User',
       required: true,
     },
     description: {
       type: String,
     },
-    imageUrls: {
+    mediaUrls: {
       type: Array,
-    },
-    videoUrls: {
-      type: Array,
+      default: [],
     },
     likes: {
       type: [
@@ -24,24 +23,42 @@ const postSchema = new mongoose.Schema(
       ],
       default: [],
     },
-    postType: {
-      type: String,
-      enum: {
-        values: [
-          'desciption_only',
-          'image_only',
-          'video_only',
-          'description_image',
-          'description_video',
-          'image_video',
-          'all',
-        ],
-      },
+    comments: {
+      type: [
+        {
+          type: mongoose.Schema.ObjectId,
+          ref: 'Comment',
+        },
+      ],
+      default: [],
     },
   },
   {
     timestamps: true,
   }
 );
+
+postSchema.pre(/^find/, function (next) {
+  this.populate([
+    {
+      path: 'createdBy',
+      select: 'username avatarUrl',
+    },
+    {
+      path: 'likes',
+      select: 'username avatarUrl',
+    },
+    {
+      path: 'comments',
+      select: 'createdBy description createdAt',
+      populate: {
+        path: 'createdBy',
+        select: 'username avatarUrl',
+      },
+    },
+  ]);
+
+  next();
+});
 
 module.exports = mongoose.model('Post', postSchema);

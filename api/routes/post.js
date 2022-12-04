@@ -20,12 +20,12 @@ router.delete('/delete/:postId', postController.deletePost);
 router.patch('/like/:postId', postController.likePost);
 
 // unlike a post
-router.patch('/like/:postId', postController.unlikePost);
+router.patch('/unlike/:postId', postController.unlikePost);
 
 // get a post
 router.get('/get/:postId', postController.getPost);
 
 // get timeline posts
-router.get('/get-timeline-posts', postController.getPost);
+router.get('/get-timeline-posts', postController.getTimelinePosts);
 
 module.exports = router;
