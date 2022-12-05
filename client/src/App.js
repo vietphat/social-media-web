@@ -1,60 +1,38 @@
-import {
-  createBrowserRouter,
-  RouterProvider,
-  Route,
-  Navigate,
-} from 'react-router-dom';
+import { Fragment } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import LoginPage from './pages/Login';
-import RegisterPage from './pages/Register';
-import HomePage from './pages/Home';
-import ProfilePage from './pages/Profile';
-import Layout from './components/Layout';
+import { publicRoutes } from '~/routes';
+import { DefaultLayout } from '~/layouts';
 
 function App() {
-  const currentUser = true;
+    return (
+        <Router>
+            <Routes>
+                {publicRoutes.map((route, index) => {
+                    const Page = route.component;
+                    let Layout = DefaultLayout;
 
-  const ProtectedRoute = ({ children }) => {
-    if (currentUser) {
-      return children;
-    }
-    return <Navigate to='/login' />;
-  };
+                    if (route.layout) {
+                        Layout = route.layout;
+                    } else if (route.layout === null) {
+                        Layout = Fragment;
+                    }
 
-  const router = createBrowserRouter([
-    {
-      path: '/',
-      element: (
-        <ProtectedRoute>
-          <Layout />
-        </ProtectedRoute>
-      ),
-      children: [
-        {
-          path: '/',
-          element: <HomePage />,
-        },
-        {
-          path: '/profile/:id',
-          element: <ProfilePage />,
-        },
-      ],
-    },
-    {
-      path: '/login',
-      element: <LoginPage />,
-    },
-    {
-      path: '/register',
-      element: <RegisterPage />,
-    },
-  ]);
-
-  return (
-    <div>
-      <RouterProvider router={router} />
-    </div>
-  );
+                    return (
+                        <Route
+                            key={index}
+                            path={route.path}
+                            element={
+                                <Layout>
+                                    <Page />
+                                </Layout>
+                            }
+                        />
+                    );
+                })}
+            </Routes>
+        </Router>
+    );
 }
 
 export default App;
