@@ -4,11 +4,11 @@ import classNames from 'classnames/bind';
 import routes from '~/config/routes';
 import { Button, Input } from '~/components/AuthForm';
 import images from '~/assets/images';
-import styles from './Login.module.scss';
+import styles from './ForgotPassword.module.scss';
 
 const cx = classNames.bind(styles);
 
-const Login = () => {
+const ForgotPassword = () => {
     return (
         <div className={cx('wrapper')}>
             <div className={cx('container')}>
@@ -21,11 +21,10 @@ const Login = () => {
 
                     <div className={cx('form-controls')}>
                         <Input placeholder="Email" name="email" id="email" />
-                        <Input placeholder="Mật khẩu" name="password" id="password" type="password" />
                     </div>
 
                     <Button disabled className={cx('login-btn')}>
-                        Đăng nhập
+                        Thay đổi mật khẩu qua email
                     </Button>
 
                     <div className={cx('separation-line')}>
@@ -34,21 +33,17 @@ const Login = () => {
                         <hr className={cx('right-line')} />
                     </div>
 
-                    <Button rounded className={cx('gmail-login-button')}>
-                        Đăng nhập bằng gmail
-                    </Button>
-
-                    <Link className={cx('forgot-password-btn')} to={routes.forgotPassword}>
-                        Quên mật khẩu?
+                    <Link className={cx('register-btn')} to={routes.register}>
+                        Tạo tài khoản mới?
                     </Link>
                 </form>
 
                 <div className={cx('alternative-action-container')}>
-                    Chưa có tài khoản <Link to={routes.register}>Đăng ký ngay</Link>
+                    Quay về trang <Link to={routes.login}>Đăng nhập</Link>
                 </div>
             </div>
         </div>
     );
 };
 
-export default Login;
+export default ForgotPassword;

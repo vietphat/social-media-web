@@ -1,0 +1,13 @@
+.input {
+    border: 1px solid var(--elevated-separator);
+    padding: 9px 0px 7px 8px;
+    width: 100%;
+    color: var(--secondary-text);
+    font-weight: 500;
+    background-color: var(--secondary-background);
+    border-radius: 3px;
+
+    &:focus {
+        outline: 1px solid var(--secondary-text);
+    }
+}

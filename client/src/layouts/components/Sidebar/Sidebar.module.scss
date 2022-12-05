@@ -1,0 +1,57 @@
+.wrapper {
+    padding: 8px 12px 20px 12px;
+    color: var(--primary-text);
+    background-color: var(--primary-background);
+    border-right: 1px solid var(--elevated-separator);
+    overflow-y: visible;
+
+    .container {
+        .logo-container {
+            height: 10rem;
+            padding: 0 1.2rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .menu {
+            padding: 0 1.2rem;
+        }
+    }
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    width: 20rem;
+    height: 4.8rem;
+    padding: 1.2rem 0.3rem 1.2rem 0.3rem;
+    margin: 1.2rem 0;
+    border-radius: 24px;
+    line-height: 1.5rem;
+    transition: background-color ease-in-out 100ms;
+
+    &:hover {
+        background-color: var(--secondary-background);
+    }
+
+    .icon {
+        img {
+            width: 2.4rem;
+            height: 2.4rem;
+            border-radius: 50%;
+        }
+    }
+}
+
+button {
+    cursor: pointer;
+    background-color: var(--primary-background);
+
+    &:hover {
+        background-color: var(--secondary-background);
+    }
+}
+
+.title {
+    padding-left: 1.6rem;
+}

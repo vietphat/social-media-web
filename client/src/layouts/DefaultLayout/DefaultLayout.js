@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import classNames from 'classnames/bind';
 
 import Sidebar from './../components/Sidebar';
 import Suggestions from './../components/Suggestions';
@@ -10,9 +10,9 @@ const DefaultLayout = ({ children }) => {
     return (
         <div className={cx('wrapper')}>
             <div className={cx('container')}>
-                <Sidebar />
+                <Sidebar classes={cx('sidebar')} />
                 <div className={cx('content')}>{children}</div>
-                <Suggestions />
+                <Suggestions classes={cx('suggestions')} />
             </div>
         </div>
     );

@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import classNames from 'classnames/bind';
 
 import Sidebar from './../components/Sidebar';
 import styles from './NoSuggestionsLayout.module.scss';
@@ -9,7 +9,7 @@ const NoSuggestionsLayout = ({ children }) => {
     return (
         <div className={cx('wrapper')}>
             <div className={cx('container')}>
-                <Sidebar />
+                <Sidebar classes={cx('sidebar')} />
                 <div className={cx('content')}>{children}</div>
             </div>
         </div>

@@ -1,0 +1,17 @@
+.wrapper {
+    width: 100%;
+    min-height: 71rem;
+
+    .container {
+        min-height: inherit;
+        display: flex;
+
+        .sidebar {
+            width: 24.5rem;
+        }
+
+        .content {
+            flex: 1;
+        }
+    }
+}
