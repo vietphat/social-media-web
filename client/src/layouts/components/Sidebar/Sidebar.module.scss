@@ -1,4 +1,9 @@
 .wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 999;
     padding: 8px 12px 20px 12px;
     color: var(--primary-text);
     background-color: var(--primary-background);

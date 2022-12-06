@@ -23,42 +23,42 @@ const Sidebar = ({ classes }) => {
                         <span className={cx('icon')}>
                             <HomeIcon />
                         </span>
-                        <span className={cx('title')}>{'Home'}</span>
+                        <span className={cx('title')}>{'Trang chủ'}</span>
                     </Link>
 
                     <button className={cx('menu-item')}>
                         <span className={cx('icon')}>
                             <SearchIcon />
                         </span>
-                        <span className={cx('title')}>{'Search'}</span>
+                        <span className={cx('title')}>{'Tìm kiếm'}</span>
                     </button>
 
                     <Link to={routes.inbox} className={cx('menu-item')}>
                         <span className={cx('icon')}>
                             <MessagesIcon />
                         </span>
-                        <span className={cx('title')}>{'Messages'}</span>
+                        <span className={cx('title')}>{'Tin nhắn'}</span>
                     </Link>
 
                     <button className={cx('menu-item')}>
                         <span className={cx('icon')}>
                             <NotificationsIcon />
                         </span>
-                        <span className={cx('title')}>{'Notifications'}</span>
+                        <span className={cx('title')}>{'Thông báo'}</span>
                     </button>
 
                     <Link to={routes.profile} className={cx('menu-item')}>
                         <span className={cx('icon')}>
                             <img src="./bjorn.jpg" alt="Bjorn Ironside" />
                         </span>
-                        <span className={cx('title')}>{'Profile'}</span>
+                        <span className={cx('title')}>{'Trang cá nhân'}</span>
                     </Link>
 
                     <button className={cx('menu-item')}>
                         <span className={cx('icon')}>
                             <LogoutIcon />
                         </span>
-                        <span className={cx('title')}>{'Logout'}</span>
+                        <span className={cx('title')}>{'Đăng xuất'}</span>
                     </button>
                 </nav>
             </div>
