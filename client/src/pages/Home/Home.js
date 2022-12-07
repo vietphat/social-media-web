@@ -1,6 +1,7 @@
 import classNames from 'classnames/bind';
 
 import Posts from '~/components/Posts';
+import UploadPost from '~/components/UploadPost';
 import styles from './Home.module.scss';
 
 const cx = classNames.bind(styles);
@@ -127,6 +128,7 @@ const timelinePosts = [
 const Home = () => {
     return (
         <div className={cx('wrapper')}>
+            <UploadPost />
             <Posts timelinePosts={timelinePosts} />
         </div>
     );

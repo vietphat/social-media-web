@@ -12,17 +12,17 @@ import Inbox from '~/pages/Inbox';
 
 // public routes
 const publicRoutes = [
-    { path: config.routes.home, component: Home },
     { path: config.routes.register, component: Register, layout: null },
     { path: config.routes.login, component: Login, layout: null },
     { path: config.routes.forgotPassword, component: ForgotPassword, layout: null },
     { path: config.routes.resetPassword, component: ResetPassword, layout: null },
-    { path: config.routes.profile, component: Profile, layout: NoSuggestionsLayout },
-    { path: config.routes.inbox, component: Inbox, layout: NoSuggestionsLayout },
-    { path: config.routes.inboxWith, component: Inbox, layout: NoSuggestionsLayout },
 ];
 
 // private routes
-const privateRoutes = [];
+const privateRoutes = [
+    { path: config.routes.home, component: Home },
+    { path: config.routes.profile, component: Profile, layout: NoSuggestionsLayout },
+    { path: config.routes.inbox, component: Inbox, layout: NoSuggestionsLayout },
+];
 
 export { publicRoutes, privateRoutes };

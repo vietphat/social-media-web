@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 
+import { useForm } from '~/hooks/useForm';
+import { VALIDATOR_EMAIL, VALIDATOR_REQUIRE } from '~/utils/validators';
 import routes from '~/config/routes';
 import { Button, Input } from '~/components/AuthForm';
 import images from '~/assets/images';
@@ -9,6 +11,26 @@ import styles from './Login.module.scss';
 const cx = classNames.bind(styles);
 
 const Login = () => {
+    const [formState, handleInputChange] = useForm(
+        {
+            email: {
+                value: '',
+                isValid: false,
+            },
+            password: {
+                value: '',
+                isValid: false,
+            },
+        },
+        false,
+    );
+
+    const handleLogin = (e) => {
+        e.preventDefault();
+
+        console.log(formState);
+    };
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('container')}>
@@ -20,11 +42,24 @@ const Login = () => {
                     </div>
 
                     <div className={cx('form-controls')}>
-                        <Input placeholder="Email" name="email" id="email" />
-                        <Input placeholder="Mật khẩu" name="password" id="password" type="password" />
+                        <Input
+                            placeholder="Email"
+                            name="email"
+                            id="email"
+                            validators={[VALIDATOR_EMAIL()]}
+                            onInput={handleInputChange}
+                        />
+                        <Input
+                            placeholder="Mật khẩu"
+                            name="password"
+                            id="password"
+                            type="password"
+                            validators={[VALIDATOR_REQUIRE()]}
+                            onInput={handleInputChange}
+                        />
                     </div>
 
-                    <Button disabled className={cx('login-btn')}>
+                    <Button onClick={handleLogin} disabled={!formState.isValid} className={cx('login-btn')}>
                         Đăng nhập
                     </Button>
 

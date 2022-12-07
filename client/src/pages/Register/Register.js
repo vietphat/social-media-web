@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 
+import { useForm } from '~/hooks/useForm';
+import { VALIDATOR_EMAIL, VALIDATOR_REQUIRE } from '~/utils/validators';
 import routes from '~/config/routes';
 import { Button, Input } from '~/components/AuthForm';
 import images from '~/assets/images';
@@ -9,6 +11,34 @@ import styles from './Register.module.scss';
 const cx = classNames.bind(styles);
 
 const Register = () => {
+    const [formState, handleInputChange] = useForm(
+        {
+            username: {
+                value: '',
+                isValid: false,
+            },
+            email: {
+                value: '',
+                isValid: false,
+            },
+            password: {
+                value: '',
+                isValid: false,
+            },
+            confirmPassword: {
+                value: '',
+                isValid: false,
+            },
+        },
+        false,
+    );
+
+    const handleRegister = (e) => {
+        e.preventDefault();
+
+        console.log(formState);
+    };
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('container')}>
@@ -31,10 +61,31 @@ const Register = () => {
                     </div>
 
                     <div className={cx('form-controls')}>
-                        <Input placeholder="Tên người dùng" name="username" id="username" />
-                        <Input placeholder="Email" name="email" id="email" />
-                        <Input placeholder="Mật khẩu" name="password" id="password" type="password" />
                         <Input
+                            validators={[VALIDATOR_REQUIRE()]}
+                            onInput={handleInputChange}
+                            placeholder="Tên người dùng"
+                            name="username"
+                            id="username"
+                        />
+                        <Input
+                            validators={[VALIDATOR_EMAIL()]}
+                            onInput={handleInputChange}
+                            placeholder="Email"
+                            name="email"
+                            id="email"
+                        />
+                        <Input
+                            validators={[VALIDATOR_REQUIRE()]}
+                            onInput={handleInputChange}
+                            placeholder="Mật khẩu"
+                            name="password"
+                            id="password"
+                            type="password"
+                        />
+                        <Input
+                            validators={[VALIDATOR_REQUIRE()]}
+                            onInput={handleInputChange}
                             placeholder="Xác nhận mật khẩu"
                             name="confirmPassword"
                             id="confirmPassword"
@@ -43,10 +94,10 @@ const Register = () => {
                     </div>
 
                     <p className={cx('description')}>
-                        Bằng cách nhấn đăng nhập, bạn đồng ý với điều khoản, chính sách riêng tư và chấp nhận cookies.
+                        Bằng cách nhấn đăng ký, bạn đồng ý với điều khoản, chính sách riêng tư và chấp nhận cookies.
                     </p>
 
-                    <Button disabled className={cx('register-btn')}>
+                    <Button onClick={handleRegister} disabled={!formState.isValid} className={cx('register-btn')}>
                         Đăng ký
                     </Button>
                 </form>

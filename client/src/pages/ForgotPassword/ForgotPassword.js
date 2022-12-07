@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 
+import { useForm } from '~/hooks/useForm';
+import { VALIDATOR_EMAIL, VALIDATOR_REQUIRE } from '~/utils/validators';
 import routes from '~/config/routes';
 import { Button, Input } from '~/components/AuthForm';
 import images from '~/assets/images';
@@ -9,6 +11,22 @@ import styles from './ForgotPassword.module.scss';
 const cx = classNames.bind(styles);
 
 const ForgotPassword = () => {
+    const [formState, handleInputChange] = useForm(
+        {
+            email: {
+                value: '',
+                isValid: false,
+            },
+        },
+        false,
+    );
+
+    const handleForgotPassword = (e) => {
+        e.preventDefault();
+
+        console.log(formState);
+    };
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('container')}>
@@ -20,10 +38,16 @@ const ForgotPassword = () => {
                     </div>
 
                     <div className={cx('form-controls')}>
-                        <Input placeholder="Email" name="email" id="email" />
+                        <Input
+                            onInput={handleInputChange}
+                            validators={[VALIDATOR_EMAIL]}
+                            placeholder="Email"
+                            name="email"
+                            id="email"
+                        />
                     </div>
 
-                    <Button disabled className={cx('login-btn')}>
+                    <Button onClick={handleForgotPassword} disabled={!formState.isValid} className={cx('login-btn')}>
                         Thay đổi mật khẩu qua email
                     </Button>
 
