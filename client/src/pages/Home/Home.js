@@ -11,7 +11,7 @@ const timelinePosts = [
         createdBy: {
             _id: '638b8bb4e03ad60223dd7089',
             username: 'Walter White',
-            avatarUrl: 'default-avatar.jpg',
+            avatarUrl: '/bjorn.jpg',
         },
         description: 'Bla Bla bLa blA',
         mediaUrls: [
@@ -23,14 +23,73 @@ const timelinePosts = [
         createdAt: '2022-12-04T14:54:30.144Z',
         updatedAt: '2022-12-04T14:54:30.144Z',
         __v: 0,
-        comments: [],
+        comments: [
+            {
+                _id: '638cd0920941f81faddb8ecc',
+                createdBy: {
+                    _id: '638b8bb4e03ad60223dd7081',
+                    username: 'Walter White',
+                    avatarUrl: '/bjorn.jpg',
+                },
+                description: '????',
+                likes: ['1', '2', '3'],
+                createdAt: '2022-12-04T16:53:38.523Z',
+            },
+            {
+                _id: '638cd0920941f81faddb8ece',
+                createdBy: {
+                    _id: '638b8bb4e03ad60223dd7089',
+                    username: 'Walter White',
+                    avatarUrl: '/bjorn.jpg',
+                },
+                description: 'This is a comment',
+                likes: [],
+                createdAt: '2022-12-04T16:53:38.523Z',
+            },
+            {
+                _id: '638cd0920941f81faddb8e',
+                createdBy: {
+                    _id: '638b8bb4e03ad60dd7089',
+                    username: 'Walter White',
+                    avatarUrl: '/bjorn.jpg',
+                },
+                likes: [],
+                description:
+                    'This is another comment This is another commenThis is another commenThis is another commenThis is another commen',
+                createdAt: '2022-12-04T16:53:38.523Z',
+            },
+            {
+                _id: '638cd0920941f81faddb8eewe',
+                createdBy: {
+                    _id: '638b8bb4e03ad60dd7089',
+                    username: 'Walter White',
+                    avatarUrl: '/bjorn.jpg',
+                },
+                likes: [],
+                description:
+                    'This is another comment This is another commenThis is another commenThis is another commenThis is another commen',
+                createdAt: '2022-12-04T16:53:38.523Z',
+            },
+            {
+                _id: '638cd0920941f81faddb8eeqweqwqe',
+                createdBy: {
+                    _id: '638b8bb4e03ad60dd7089',
+                    username: 'Walter White',
+                    avatarUrl: '/bjorn.jpg',
+                },
+                likes: [],
+                description:
+                    'This is another comment This is another commenThis is another commenThis is another commenThis is another commen',
+                createdAt: '2022-12-04T16:53:38.523Z',
+            },
+        ],
     },
     {
         _id: '638cb4a6ec1f185b6a6c46b9',
         createdBy: {
             _id: '638b8bb4e03ad60223dd7089',
             username: 'Walter White',
-            avatarUrl: 'default-avatar.jpg',
+            avatarUrl: '/bjorn.jpg',
         },
         description: 'Bla Bla bLa blA',
         mediaUrls: [
@@ -49,7 +108,7 @@ const timelinePosts = [
         createdBy: {
             _id: '638b8bb4e03ad60223dd7089',
             username: 'Walter White',
-            avatarUrl: 'default-avatar.jpg',
+            avatarUrl: '/bjorn.jpg',
         },
         description: 'Bla Bla bLa blA',
         mediaUrls: [

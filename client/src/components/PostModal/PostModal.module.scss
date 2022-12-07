@@ -1,0 +1,239 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: 200;
+}
+
+.wrapper {
+    z-index: 300;
+    position: fixed;
+    top: 2.4rem;
+    left: 26.4rem;
+    width: 100rem;
+    height: 66.6rem;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+    display: flex;
+    align-items: center;
+    background-color: black;
+    border-radius: 0 .5rem .5rem 0;
+    overflow: hidden;
+
+
+    .content-container {
+        width: 49rem;
+        height: 60.6rem;
+    }
+
+    .comments-container {
+        flex: 1;
+        height: 100%;
+        background-color: #fff;
+
+        .header {
+            height: 6rem;
+            border-bottom: 1px solid var(--elevated-separator);
+            display: flex;
+
+            .owner-link {
+                width: 45rem;
+                padding: 1.4rem 1.4rem 1.4rem 1.6rem;
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+
+                img {
+                    width: 4.2rem;
+                    height: 4.2rem;
+                    border-radius: 50%;
+                }
+
+                h5 {
+                    font-weight: 600;
+                    font-size: 1.4rem;
+                }
+            }
+
+            .close-btn {
+                flex: 1;
+                transition: background-color ease-in-out 100ms;
+
+                svg {
+                    transition: color ease-in-out 100ms;
+                    font-size: 1.8rem;
+                    color: rgba(0, 0, 0, 0.525);
+                }
+
+                &:hover {
+                    background: transparent;
+
+                    svg {
+                        color: rgba(0, 0, 0, 0.925);
+                    }
+                }
+            }
+        }
+
+        .body {
+            height: 38rem;
+            border-bottom: 1px solid var(--elevated-separator);
+            overflow: scroll;
+
+
+            .comments {
+                padding: 1.3rem 1.6rem;
+
+                .comment {
+                    margin: 1.5rem 0;
+                    display: flex;
+                    gap: 2rem;
+
+                    .owner-avatar {
+                        width: 3.2rem;
+
+                        a {
+                            img {
+                                width: 3.2rem;
+                                height: 3.2rem;
+                                border-radius: 50%;
+                                object-fit: cover;
+                            }
+                        }
+                    }
+
+                    .main {
+                        flex: 1;
+
+                        .top {
+                            span {
+                                font-weight: 400;
+                                font-size: 1.4rem;
+
+
+                                a {
+                                    font-weight: 600;
+                                    font-size: 1.4rem;
+                                }
+                            }
+                        }
+
+                        .bottom {
+                            display: flex;
+                            align-items: center;
+                            gap: 1rem;
+
+                            span,
+                            h6 {
+                                font-size: 1.2rem;
+                                font-weight: 400;
+                            }
+
+                            h6 {
+                                cursor: pointer;
+                            }
+                        }
+                    }
+
+                    .like-comment {
+                        width: 2rem;
+
+                        svg {
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+        }
+
+        .footer {
+            padding: .5rem 1.2rem;
+
+            .actions {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                height: 4.6rem;
+
+                svg {
+                    cursor: pointer;
+                    transition: color ease-in-out 100ms;
+
+                    &:hover {
+                        color: rgba(0, 0, 0, 0.519);
+                        fill: rgba(0, 0, 0, 0.519);
+                    }
+                }
+            }
+
+            h5 {
+                font-weight: 600;
+                font-size: 1.4rem;
+                cursor: pointer;
+            }
+
+            p {
+                padding: 1rem 0;
+                font-weight: 500;
+                font-size: 1.4rem;
+            }
+
+            span {
+                padding: 1rem 0;
+                font-weight: 500;
+                font-size: 1.4rem;
+            }
+        }
+
+        .message-box {
+            width: 100%;
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+
+            .message-input {
+                display: flex;
+                align-items: center;
+                width: 95%;
+                height: 4.4rem;
+                border: 1px solid var(--elevated-separator);
+                border-radius: 3rem;
+
+                .choose-emoji-btn {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 5.2rem;
+
+                    svg {
+                        cursor: pointer;
+
+                        &:hover {
+                            opacity: 0.7;
+                        }
+                    }
+                }
+
+                .enter {
+                    flex: 1;
+                    display: flex;
+                    justify-content: space-between;
+                    padding-right: 3rem;
+
+                    input {
+                        width: 93%;
+                    }
+
+                    button {
+                        color: var(--success-text);
+                        font-size: 1.4rem;
+                        font-weight: 500;
+                    }
+                }
+            }
+        }
+    }
+}

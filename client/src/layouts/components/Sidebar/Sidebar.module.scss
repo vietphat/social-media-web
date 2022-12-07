@@ -3,7 +3,7 @@
     top: 0;
     left: 0;
     bottom: 0;
-    z-index: 999;
+    z-index: 100;
     padding: 8px 12px 20px 12px;
     color: var(--primary-text);
     background-color: var(--primary-background);
@@ -34,6 +34,7 @@
     border-radius: 24px;
     line-height: 1.5rem;
     transition: background-color ease-in-out 100ms;
+    font-size: 1.6rem;
 
     &:hover {
         background-color: var(--secondary-background);

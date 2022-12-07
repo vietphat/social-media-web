@@ -5,7 +5,8 @@ const routes = {
     forgotPassword: '/forgot-password',
     resetPassword: '/reset-password/:token',
     inbox: '/inbox',
-    profile: '/profile/@:nickname',
+    inboxWith: '/inbox/:userId',
+    profile: '/profile/:userId',
     changeInfo: '/change-info',
     changePassword: '/change-password',
 };

@@ -37,7 +37,7 @@ const Sidebar = ({ classes }) => {
                         <span className={cx('icon')}>
                             <MessagesIcon />
                         </span>
-                        <span className={cx('title')}>{'Tin nhắn'}</span>
+                        <span className={cx('title')}>{'Nhắn tin'}</span>
                     </Link>
 
                     <button className={cx('menu-item')}>
@@ -49,7 +49,7 @@ const Sidebar = ({ classes }) => {
 
                     <Link to={routes.profile} className={cx('menu-item')}>
                         <span className={cx('icon')}>
-                            <img src="./bjorn.jpg" alt="Bjorn Ironside" />
+                            <img src="/bjorn.jpg" alt="Bjorn Ironside" />
                         </span>
                         <span className={cx('title')}>{'Trang cá nhân'}</span>
                     </Link>

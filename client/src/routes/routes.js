@@ -19,6 +19,7 @@ const publicRoutes = [
     { path: config.routes.resetPassword, component: ResetPassword, layout: null },
     { path: config.routes.profile, component: Profile, layout: NoSuggestionsLayout },
     { path: config.routes.inbox, component: Inbox, layout: NoSuggestionsLayout },
+    { path: config.routes.inboxWith, component: Inbox, layout: NoSuggestionsLayout },
 ];
 
 // private routes

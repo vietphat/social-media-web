@@ -1,0 +1,61 @@
+.user-post-item {
+    width: 29.3rem;
+    cursor: pointer;
+    position: relative;
+    margin-bottom: 3rem;
+
+    .interactions-container {
+        position: absolute;
+
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+
+        .interactions {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+
+            svg {
+                transition: color ease-in-out 100ms;
+                color: transparent;
+            }
+
+            span {
+                transition: color ease-in-out 100ms;
+                color: transparent;
+            }
+        }
+    }
+
+    img {
+        transition: opacity ease-in-out 100ms;
+        width: 100%;
+        height: 29.3rem;
+        object-fit: cover;
+    }
+
+    video {
+        width: 100%;
+    }
+
+    &:hover {
+        img {
+            opacity: .5;
+        }
+
+        .interactions {
+            svg {
+                color: rgb(135, 116, 116);
+            }
+
+            span {
+                color: rgb(135, 116, 116);
+            }
+        }
+    }
+}

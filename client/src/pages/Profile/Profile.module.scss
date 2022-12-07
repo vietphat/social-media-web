@@ -1,0 +1,130 @@
+.wrapper {
+    width: 93.5rem;
+    padding-top: 3rem;
+
+    .header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 3rem;
+
+
+        .avatar {
+            width: 29.1rem;
+            height: 16rem;
+            margin-right: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            img {
+                width: 16.0rem;
+                height: 16.0rem;
+                border-radius: 50%;
+                cursor: pointer;
+            }
+        }
+
+        .info {
+            flex: 1;
+
+            .actions {
+                display: flex;
+
+                .username {
+                    font-weight: 300;
+                    font-size: 2.8rem;
+                    cursor: pointer;
+                }
+
+                .action-btns {
+                    margin-left: 4rem;
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-end;
+                    gap: 1.5rem;
+
+
+                    .follow-btn {
+                        font-size: 1.4rem;
+                        border: 1px solid var(--elevated-separator);
+                        padding: .5rem .9rem;
+                        border-radius: .3rem;
+                        font-weight: 500;
+                    }
+
+                    .inbox-btn {
+                        font-size: 1.4rem;
+                        border: 1px solid var(--elevated-separator);
+                        padding: .5rem .9rem;
+                        border-radius: .3rem;
+                        font-weight: 500;
+                    }
+
+                    .add-friend-btn {
+                        svg {
+                            height: 2.4rem;
+                            width: 2.4rem;
+                        }
+                    }
+                }
+            }
+
+            .views {
+                display: flex;
+                gap: 2.5rem;
+                margin: 2rem 0;
+
+                h4 {
+                    cursor: pointer;
+
+                    b {
+                        font-weight: 700;
+                    }
+
+                    span {
+                        font-weight: 500;
+                    }
+                }
+            }
+
+            .others {
+                display: flex;
+                gap: 2.5rem;
+
+                span {
+                    font-weight: 300;
+                }
+            }
+        }
+    }
+
+    .posts {
+        border-top: 1px solid var(--elevated-separator);
+
+        .posts-btn {
+            margin: 1rem 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: .5rem;
+            font-weight: 500;
+
+            svg {}
+
+            span {}
+        }
+
+        .posts-list {
+            h2 {
+                padding-top: 5rem;
+                text-align: center;
+                font-weight: 300;
+            }
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+    }
+}

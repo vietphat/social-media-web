@@ -3,7 +3,7 @@ import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleChevronRight, faCircleChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
-import styles from './Posts.module.scss';
+import styles from './Content.module.scss';
 
 const cx = classNames.bind(styles);
 

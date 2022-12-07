@@ -102,7 +102,7 @@
         }
 
         .footer {
-            padding: .5rem 1.2rem;
+            padding: 1.2rem 1.2rem 2rem 1.2rem;
 
             .actions {
                 display: flex;
@@ -122,20 +122,20 @@
             }
 
             h5 {
-                font-weight: 600;
+                font-weight: 500;
                 font-size: 1.4rem;
                 cursor: pointer;
             }
 
             p {
-                padding: 1rem 0;
-                font-weight: 500;
+                padding: .5rem 0;
+                font-weight: 400;
                 font-size: 1.4rem;
             }
 
             span {
-                padding: 1rem 0;
-                font-weight: 500;
+                padding: .3rem 0;
+                font-weight: 300;
                 font-size: 1.4rem;
             }
         }
