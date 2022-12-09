@@ -4,11 +4,11 @@ const routes = {
     login: '/login',
     forgotPassword: '/forgot-password',
     resetPassword: '/reset-password/:token',
-    inbox: '/inbox',
-    inboxWith: '/inbox/:userId',
+    inbox: '/inbox/:conversationId',
     profile: '/profile/:userId',
     changeInfo: '/change-info',
     changePassword: '/change-password',
+    chatbox: '/chatbox/:conversationId',
 };
 
 export default routes;

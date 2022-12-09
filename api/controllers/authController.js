@@ -14,7 +14,7 @@ const generateToken = (id) => {
 };
 
 // Hàm tạo và gửi jsonwebtoken qua json
-const createAndSendToken = (user, res, req, statusCode) => {
+const createAndSendToken = async (user, res, req, statusCode) => {
   const token = generateToken(user._id);
 
   const cookieOptions = {
@@ -29,10 +29,27 @@ const createAndSendToken = (user, res, req, statusCode) => {
 
   user.password = undefined;
 
+  const data = await User.populate(user, [
+    { path: 'followers', select: 'username avatarUrl' },
+    { path: 'followering', select: 'username avatarUrl' },
+    { path: 'friendsList', select: 'username avatarUrl' },
+    {
+      path: 'posts',
+      populate: [
+        {
+          path: 'comments',
+          select: 'username avatarUrl description',
+          populate: { path: 'likes', select: 'username avatarUrl' },
+        },
+        { path: 'likes', select: 'username avatarUrl' },
+      ],
+    },
+  ]);
+
   res.status(statusCode).json({
     status: 'Thành công',
     token,
-    data: user,
+    data,
   });
 };
 
@@ -53,7 +70,7 @@ exports.register = catchAsync(async (req, res, next) => {
   //   `${req.protocol}://${req.get('host')}/me`
   // ).sendWelcome();
 
-  createAndSendToken(user, res, req, 201);
+  await createAndSendToken(user, res, req, 201);
 });
 
 // Sign in
@@ -80,7 +97,7 @@ exports.signin = catchAsync(async (req, res, next) => {
   }
 
   // 4. Tạo và gửi token
-  createAndSendToken(user, res, req, 200);
+  await createAndSendToken(user, res, req, 200);
 });
 
 // Sign out
@@ -148,7 +165,7 @@ exports.changePassword = catchAsync(async (req, res, next) => {
   user.confirmPassword = confirmPassword;
   await user.save();
 
-  createAndSendToken(user, res, req, 200);
+  await createAndSendToken(user, res, req, 200);
 });
 
 // Forgot password
@@ -227,5 +244,5 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   await user.save();
 
   // Log the user in
-  createAndSendToken(user, res, req, 200);
+  await createAndSendToken(user, res, req, 200);
 });

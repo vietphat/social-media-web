@@ -12,6 +12,27 @@ exports.getUser = catchAsync(async (req, res, next) => {
     { path: 'followers', select: 'username avatarUrl' },
     { path: 'following', select: 'username avatarUrl' },
     { path: 'friendsList', select: 'username avatarUrl' },
+    {
+      path: 'posts',
+      populate: [
+        {
+          path: 'createdBy',
+          select: 'username avatar',
+        },
+        {
+          path: 'likes',
+          select: 'username avatar',
+        },
+        {
+          path: 'comments',
+          select: 'createdBy description createdAt likes',
+          populate: [
+            { path: 'createdBy', select: 'username avatar' },
+            { path: 'likes', select: 'username avatar' },
+          ],
+        },
+      ],
+    },
   ]);
 
   if (!user) {
@@ -29,6 +50,23 @@ exports.getUser = catchAsync(async (req, res, next) => {
   });
 });
 
+// Get random users
+exports.getRandomUsers = catchAsync(async (req, res, next) => {
+  const data = await User.aggregate([
+    { $sample: { size: 5 } },
+    {
+      $match: {
+        _id: { $ne: req.user._id },
+      },
+    },
+  ]);
+
+  res.status(200).json({
+    status: 'Thành công',
+    data,
+  });
+});
+
 // Update user informations
 exports.updateInformations = catchAsync(async (req, res, next) => {
   // Ngăn cập nhật mật khẩu bằng route này
@@ -41,7 +79,7 @@ exports.updateInformations = catchAsync(async (req, res, next) => {
     );
   }
 
-  const { username, phoneNumber, address, avatarUrl, coverImageUrl } = req.body;
+  const { username, phoneNumber, address, avatarUrl } = req.body;
 
   // Cập nhật và lưu vào db
   const user = await User.findByIdAndUpdate(
@@ -50,9 +88,10 @@ exports.updateInformations = catchAsync(async (req, res, next) => {
       username,
       phoneNumber,
       address,
-      avatarUrl: avatarUrl === '' ? 'default-avatar.jpg' : avatarUrl,
-      coverImageUrl:
-        coverImageUrl === '' ? 'default-cover-image.jpg' : coverImageUrl,
+      avatarUrl:
+        avatarUrl === ''
+          ? 'https://firebasestorage.googleapis.com/v0/b/social-media-web-1648d.appspot.com/o/users%2Favatars%2Fdefault-avatar.jpg?alt=media&token=fe149b52-bf43-4711-ad59-5b1745d6f0ef'
+          : avatarUrl,
     },
     {
       runValidators: true,
@@ -61,7 +100,7 @@ exports.updateInformations = catchAsync(async (req, res, next) => {
   );
 
   res.status(200).json({
-    status: 'success',
+    status: 'Cập nhật thành công',
     user,
   });
 });

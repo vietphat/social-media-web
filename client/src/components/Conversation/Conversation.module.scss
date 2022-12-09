@@ -1,0 +1,26 @@
+.conversation {
+    padding: .8rem 2rem;
+    margin: 1rem 0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    transition: background-color ease-in-out 100ms;
+
+    img {
+        width: 5.6rem;
+        height: 5.6rem;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    h5 {
+        font-weight: 500;
+        color: var(--primary-text);
+        font-size: 1.4rem;
+    }
+
+    &:hover {
+        background-color: var(--hightlight-background);
+    }
+}

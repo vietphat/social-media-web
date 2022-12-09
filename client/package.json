@@ -6,16 +6,23 @@
         "@fortawesome/fontawesome-svg-core": "^6.2.1",
         "@fortawesome/free-solid-svg-icons": "^6.2.1",
         "@fortawesome/react-fontawesome": "^0.2.0",
+        "@reduxjs/toolkit": "^1.9.1",
         "@testing-library/jest-dom": "^5.16.5",
         "@testing-library/react": "^13.4.0",
         "@testing-library/user-event": "^13.5.0",
+        "axios": "^1.2.1",
         "classnames": "^2.3.2",
+        "firebase": "^9.14.0",
         "normalize.css": "^8.0.1",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
+        "react-redux": "^8.0.5",
         "react-router-dom": "^6.3.0",
         "react-scripts": "5.0.1",
         "react-transition-group": "^4.4.5",
+        "redux-persist": "^6.0.0",
+        "socket.io-client": "^4.5.4",
+        "timeago.js": "^4.0.0-beta.3",
         "web-vitals": "^2.1.4"
     },
     "devDependencies": {
@@ -47,5 +54,6 @@
             "last 1 firefox version",
             "last 1 safari version"
         ]
-    }
+    },
+    "proxy": "http://localhost:8800/api"
 }

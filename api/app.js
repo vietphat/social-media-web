@@ -2,6 +2,7 @@
 const express = require('express');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const cors = require('cors');
 
 // File nội bộ
 const router = require('./routes/index');
@@ -14,6 +15,7 @@ const app = express();
 app.use(express.json());
 app.use(helmet());
 app.use(morgan('common'));
+app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 
 router(app);
 

@@ -10,6 +10,9 @@ router.get('/:userId', userController.getUser);
 
 router.use(authController.protect);
 
+// Get random user
+router.get('/get/random-users', userController.getRandomUsers);
+
 // Update user informations
 router.patch('/update-informations', userController.updateInformations);
 

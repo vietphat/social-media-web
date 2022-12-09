@@ -46,11 +46,8 @@ const userSchema = new mongoose.Schema(
     },
     avatarUrl: {
       type: String,
-      default: 'default-avatar.jpg',
-    },
-    coverImageUrl: {
-      type: String,
-      default: 'default-cover-image.jpg',
+      default:
+        'https://firebasestorage.googleapis.com/v0/b/social-media-web-1648d.appspot.com/o/users%2Favatars%2Fdefault-avatar.jpg?alt=media&token=fe149b52-bf43-4711-ad59-5b1745d6f0ef',
     },
     phoneNumber: {
       type: String,
@@ -101,6 +98,15 @@ const userSchema = new mongoose.Schema(
         {
           type: mongoose.Schema.ObjectId,
           ref: 'User',
+        },
+      ],
+      default: [],
+    },
+    posts: {
+      type: [
+        {
+          type: mongoose.Schema.ObjectId,
+          ref: 'Post',
         },
       ],
       default: [],

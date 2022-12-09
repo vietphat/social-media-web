@@ -1,5 +1,6 @@
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
+import { format } from 'timeago.js';
 
 import Content from './Content';
 import { MoreIcon, NotificationsIcon, MessagesIcon, CommentIcon } from '~/components/Icons';
@@ -11,26 +12,22 @@ import { Fragment } from 'react';
 
 const cx = classNames.bind(styles);
 
-const PostItem = ({ createdBy, mediaUrls, comments }) => {
+const PostItem = (props) => {
     const { isShowing, toggle } = useModal();
-
     return (
         <Fragment>
-            <PostModal
-                isShowing={isShowing}
-                hide={toggle}
-                comments={comments}
-                createdBy={createdBy}
-                mediaUrls={mediaUrls}
-            />
+            <PostModal isShowing={isShowing} hide={toggle} {...props.post} />
             <div className={cx('post-item')}>
                 <div className={cx('header')}>
                     <div className={cx('owner-info')}>
-                        <Link to={routes.profile}>
-                            <img src="./bjorn.jpg" alt="owner" />
+                        <Link to={routes.profile.replace(':userId', props.post.createdBy._id)}>
+                            <img src={props.post.createdBy.avatarUrl} alt="owner" />
                         </Link>
-                        <Link className={cx('username')} to={routes.profile}>
-                            {createdBy.username}
+                        <Link
+                            className={cx('username')}
+                            to={routes.profile.replace(':userId', props.post.createdBy._id)}
+                        >
+                            {props.post.createdBy.username}
                         </Link>
                     </div>
                     <div className={cx('more-btn')}>
@@ -39,7 +36,7 @@ const PostItem = ({ createdBy, mediaUrls, comments }) => {
                 </div>
 
                 <div className={cx('body')}>
-                    <Content mediaUrls={mediaUrls} />
+                    <Content mediaUrls={props.post.mediaUrls} />
                 </div>
 
                 <div className={cx('footer')}>
@@ -49,11 +46,11 @@ const PostItem = ({ createdBy, mediaUrls, comments }) => {
                         <MessagesIcon />
                     </div>
 
-                    <h5>132,758 người thích</h5>
+                    <h5>{props.post.likes.length} người thích</h5>
 
-                    <p>{createdBy.username} vừa đăng trạng thái mới</p>
+                    <p>{props.post.createdBy.username + ': ' + props.post.description}</p>
 
-                    <span>19 ngày trước</span>
+                    <span>{format(props.post.createdAt)}</span>
                 </div>
             </div>
         </Fragment>

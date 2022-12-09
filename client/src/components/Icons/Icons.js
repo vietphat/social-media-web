@@ -376,16 +376,16 @@ export const ExclamationIcon = ({ width = '2.4rem', height = '2.4rem', className
             fill="none"
             r="10.5"
             stroke="currentColor"
-            strokLinecap="round"
-            strokLinejoin="round"
+            strokeLinecap="round"
+            stroklinejoin="round"
             strokeWidth="2"
         ></circle>
         <circle cx="11.819" cy="7.709" r="1.25"></circle>
         <line
             fill="none"
             stroke="currentColor"
-            strokLinecap="round"
-            strokLinejoin="round"
+            strokeLinecap="round"
+            stroklinejoin="round"
             strokeWidth="2"
             x1="10.569"
             x2="13.432"
@@ -396,8 +396,8 @@ export const ExclamationIcon = ({ width = '2.4rem', height = '2.4rem', className
             fill="none"
             points="10.569 11.05 12 11.05 12 16.777"
             stroke="currentColor"
-            strokLinecap="round"
-            strokLinejoin="round"
+            strokeLinecap="round"
+            stroklinejoin="round"
             strokeWidth="2"
         ></polyline>
     </svg>

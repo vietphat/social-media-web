@@ -9,10 +9,11 @@ import styles from './UserPostItem.module.scss';
 const cx = classNames.bind(styles);
 
 const UserPostItem = ({ post }) => {
+    console.log(post);
     const { isShowing, toggle } = useModal();
 
     function checkImageURL(url) {
-        return url.match(/\.(jpeg|jpg|gif|png)$/) != null;
+        return /jpg|png|jpeg/.test(url);
     }
 
     let content;
@@ -24,13 +25,7 @@ const UserPostItem = ({ post }) => {
 
     return (
         <React.Fragment>
-            <PostModal
-                isShowing={isShowing}
-                hide={toggle}
-                comments={post.comments}
-                createdBy={post.createdBy}
-                mediaUrls={post.mediaUrls}
-            />
+            <PostModal isShowing={isShowing} hide={toggle} {...post} />
             <div onClick={toggle} className={cx('user-post-item')}>
                 <div className={cx('interactions-container')}>
                     <div className={cx('interactions')}>

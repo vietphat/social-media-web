@@ -1,6 +1,10 @@
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
+import httpRequest from '~/utils/httpRequest';
+import { logout } from '~/store';
 import { HomeIcon, MessagesIcon, SearchIcon, NotificationsIcon, LogoutIcon } from '~/components/Icons';
 import routes from '~/config/routes';
 import images from '~/assets/images';
@@ -9,6 +13,18 @@ import styles from './Sidebar.module.scss';
 const cx = classNames.bind(styles);
 
 const Sidebar = ({ classes }) => {
+    const user = useSelector((state) => state.user);
+
+    const dispatch = useDispatch();
+
+    const handleLogout = async (e) => {
+        e.preventDefault();
+
+        await httpRequest.get('/auth/signout');
+
+        dispatch(logout());
+    };
+
     return (
         <div className={cx('wrapper', classes)}>
             <div className={cx('container')}>
@@ -33,7 +49,7 @@ const Sidebar = ({ classes }) => {
                         <span className={cx('title')}>{'Tìm kiếm'}</span>
                     </button>
 
-                    <Link to={routes.inbox} className={cx('menu-item')}>
+                    <Link to={routes.chatbox} className={cx('menu-item')}>
                         <span className={cx('icon')}>
                             <MessagesIcon />
                         </span>
@@ -47,14 +63,14 @@ const Sidebar = ({ classes }) => {
                         <span className={cx('title')}>{'Thông báo'}</span>
                     </button>
 
-                    <Link to={routes.profile} className={cx('menu-item')}>
+                    <Link to={routes.profile.replace(':userId', user.currentUser._id)} className={cx('menu-item')}>
                         <span className={cx('icon')}>
-                            <img src="/bjorn.jpg" alt="Bjorn Ironside" />
+                            <img src={user.currentUser.avatarUrl} alt="avatar" />
                         </span>
                         <span className={cx('title')}>{'Trang cá nhân'}</span>
                     </Link>
 
-                    <button className={cx('menu-item')}>
+                    <button onClick={handleLogout} className={cx('menu-item')}>
                         <span className={cx('icon')}>
                             <LogoutIcon />
                         </span>

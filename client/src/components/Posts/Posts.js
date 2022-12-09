@@ -8,9 +8,13 @@ const cx = classNames.bind(styles);
 const Posts = ({ timelinePosts }) => {
     return (
         <div className={cx('posts')}>
-            {timelinePosts.map((post) => {
-                return <PostItem key={post._id} {...post} />;
-            })}
+            {timelinePosts.length === 0 ? (
+                <div>Không có bài viết nào</div>
+            ) : (
+                timelinePosts.map((post) => {
+                    return <PostItem key={post._id} post={post} />;
+                })
+            )}
         </div>
     );
 };

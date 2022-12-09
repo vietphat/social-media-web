@@ -50,11 +50,14 @@ postSchema.pre(/^find/, function (next) {
     },
     {
       path: 'comments',
-      select: 'createdBy description createdAt',
-      populate: {
-        path: 'createdBy',
-        select: 'username avatarUrl',
-      },
+      select: 'createdBy description createdAt likes',
+      populate: [
+        {
+          path: 'createdBy',
+          select: 'username avatarUrl',
+        },
+        { path: 'likes', select: 'username avatarUrl' },
+      ],
     },
   ]);
 

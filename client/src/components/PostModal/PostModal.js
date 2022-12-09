@@ -10,6 +10,7 @@ import Content from '~/components/Posts/Content';
 import Comment from './Comment';
 import styles from './PostModal.module.scss';
 import { CommentIcon, HappyFaceIcon, MessagesIcon, NotificationsIcon } from '../Icons';
+import { format } from 'timeago.js/lib/format';
 
 const cx = classNames.bind(styles);
 
@@ -25,10 +26,7 @@ const PostModal = ({ isShowing, hide, ...props }) => {
                     </div>
                     <div className={cx('comments-container')}>
                         <header className={cx('header')}>
-                            <Link
-                                className={cx('owner-link')}
-                                to={routes.profile.replace(':userId', props.createdBy._id)}
-                            >
+                            <Link className={cx('owner-link')} to={`${routes.profile}/${props.createdBy._id}`}>
                                 <img src={props.createdBy.avatarUrl} alt="avatar" />
                                 <h5>{props.createdBy.username}</h5>
                             </Link>
@@ -52,11 +50,11 @@ const PostModal = ({ isShowing, hide, ...props }) => {
                                 <MessagesIcon />
                             </div>
 
-                            <h5>132,758 người thích</h5>
+                            <h5>{props.likes.length} người thích</h5>
 
-                            <p>{props.createdBy.username} vừa đăng trạng thái mới</p>
+                            <p>{props.description}</p>
 
-                            <span>19 ngày trước</span>
+                            <span>{format(props.createdAt)}</span>
                         </div>
 
                         <div className={cx('message-box')}>

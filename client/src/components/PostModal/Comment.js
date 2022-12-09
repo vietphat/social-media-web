@@ -11,7 +11,7 @@ const Comment = ({ comment }) => {
     return (
         <div className={cx('comment')}>
             <div className={cx('owner-avatar')}>
-                <Link to={routes.profile.replace(':userId', comment.createdBy._id)}>
+                <Link to={routes.profile.replace('userId', comment.createdBy._id)}>
                     <img src={comment.createdBy.avatarUrl} alt="avatar" />
                 </Link>
             </div>
@@ -19,7 +19,7 @@ const Comment = ({ comment }) => {
             <div className={cx('main')}>
                 <div className={cx('top')}>
                     <span>
-                        <Link to={routes.profile.replace(':userId', comment.createdBy._id)}>
+                        <Link to={routes.profile.replace('userId', comment.createdBy._id)}>
                             {comment.createdBy.username}
                         </Link>
                         &nbsp;&nbsp;{comment.description}

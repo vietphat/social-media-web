@@ -23,8 +23,6 @@ const ForgotPassword = () => {
 
     const handleForgotPassword = (e) => {
         e.preventDefault();
-
-        console.log(formState);
     };
 
     return (

@@ -1,17 +1,18 @@
 import { Fragment } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import { privateRoutes, publicRoutes } from '~/routes';
 import { DefaultLayout } from '~/layouts';
 import routes from './config/routes';
 
-let isLoggedIn = false;
-
 function App() {
+    const user = useSelector((state) => state.user);
+
     return (
         <Router>
             <Routes>
-                {isLoggedIn &&
+                {user.isLoggedIn &&
                     privateRoutes.map((route, index) => {
                         const Page = route.component;
                         let Layout = DefaultLayout;
@@ -35,7 +36,7 @@ function App() {
                         );
                     })}
 
-                {!isLoggedIn &&
+                {!user.isLoggedIn &&
                     publicRoutes.map((route, index) => {
                         const Page = route.component;
                         let Layout = DefaultLayout;
@@ -59,7 +60,7 @@ function App() {
                         );
                     })}
 
-                {isLoggedIn ? (
+                {user.isLoggedIn ? (
                     <Route path="*" element={<Navigate to={routes.home} />}></Route>
                 ) : (
                     <Route path="*" element={<Navigate to={routes.login} />} />

@@ -40,6 +40,11 @@ input,
 [tabindex] {
     border: none;
     outline: none;
+    background: none;
+}
+
+button {
+    cursor: pointer;
 }
 
 a {

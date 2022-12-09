@@ -1,10 +1,15 @@
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import { Fragment, useState } from 'react';
 
 import UserPostItem from './UserPostItem';
 import routes from '~/config/routes';
 import { AddFriendIcon, PostsIcon } from '~/components/Icons';
 import styles from './Profile.module.scss';
+import { useEffect } from 'react';
 
 const cx = classNames.bind(styles);
 
@@ -250,66 +255,96 @@ const userdata = {
 };
 
 const Profile = () => {
+    const user = useSelector((state) => state.user);
+    const [userInfo, setUserInfo] = useState();
+
+    const { userId } = useParams();
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            const res = await axios.get(`http://localhost:8800/api/users/${userId}`);
+
+            if (res.status === 200) {
+                setUserInfo(res.data.data.user);
+            }
+        };
+
+        userId !== user.currentUser._id ? fetchUserData() : setUserInfo(user.currentUser);
+    }, [userId, user]);
+
+    console.log('user', userInfo);
+
     return (
-        <div className={cx('wrapper')}>
-            <div className={cx('header')}>
-                <div className={cx('avatar')}>
-                    <img src={userdata.avatarUrl} alt="avatar" />
-                </div>
+        <Fragment>
+            {userInfo ? (
+                <div className={cx('wrapper')}>
+                    <div className={cx('header')}>
+                        <div className={cx('avatar')}>
+                            <img src={userInfo.avatarUrl} alt="avatar" />
+                        </div>
 
-                <div className={cx('info')}>
-                    <div className={cx('actions')}>
-                        <h4 className={cx('username')}>{userdata.username}</h4>
+                        <div className={cx('info')}>
+                            <div className={cx('actions')}>
+                                <h4 className={cx('username')}>{userInfo.username}</h4>
 
-                        <div className={cx('action-btns')}>
-                            <button className={cx('follow-btn')}>Theo dõi</button>
-                            <Link className={cx('inbox-btn')} to={routes.inboxWith.replace(':userId', userdata._id)}>
-                                Nhắn tin
-                            </Link>
-                            <button className={cx('add-friend-btn')}>
-                                <AddFriendIcon />
-                                {/* Hủy kết bạn */}
-                            </button>
+                                <div className={cx('action-btns')}>
+                                    {user.currentUser.following.includes(userInfo._id) ? (
+                                        <button className={cx('follow-btn')}>Bỏ theo dõi</button>
+                                    ) : (
+                                        <button className={cx('follow-btn')}>Theo dõi</button>
+                                    )}
+
+                                    <Link className={cx('inbox-btn')} to={`${routes.profile}/${userInfo._id}`}>
+                                        Nhắn tin
+                                    </Link>
+                                    <button className={cx('add-friend-btn')}>
+                                        <AddFriendIcon />
+                                        {/* Hủy kết bạn */}
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div className={cx('views')}>
+                                <h4>
+                                    <b>{userInfo.posts.length}</b>
+                                    <span> bài đăng</span>
+                                </h4>
+                                <h4>
+                                    <b>{userInfo.followers.length}</b>
+                                    <span> người theo dõi</span>
+                                </h4>
+                                <h4>
+                                    <b>{userInfo.following.length}</b>
+                                    <span> đang theo dõi</span>
+                                </h4>
+                            </div>
+
+                            <div className={cx('others')}>
+                                <span>{userInfo.address}</span>
+                                <span>{userInfo.phoneNumber}</span>
+                            </div>
                         </div>
                     </div>
 
-                    <div className={cx('views')}>
-                        <h4>
-                            <b>{userdata.posts.length}</b>
-                            <span> bài đăng</span>
-                        </h4>
-                        <h4>
-                            <b>{userdata.followers.length}</b>
-                            <span> người theo dõi</span>
-                        </h4>
-                        <h4>
-                            <b>{userdata.following.length}</b>
-                            <span> đang theo dõi</span>
-                        </h4>
-                    </div>
+                    <div className={cx('posts')}>
+                        <div className={cx('posts-btn')}>
+                            <PostsIcon />
+                            <span>BÀI VIẾT</span>
+                        </div>
 
-                    <div className={cx('others')}>
-                        <span>{userdata.address}</span>
-                        <span>{userdata.phoneNumber}</span>
+                        <div className={cx('posts-list')}>
+                            {userInfo.posts.length > 0 ? (
+                                userInfo.posts.map((post) => <UserPostItem key={post._id} post={post} />)
+                            ) : (
+                                <h2>Không có bài viết</h2>
+                            )}
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <div className={cx('posts')}>
-                <div className={cx('posts-btn')}>
-                    <PostsIcon />
-                    <span>BÀI VIẾT</span>
-                </div>
-
-                <div className={cx('posts-list')}>
-                    {userdata.posts.length > 0 ? (
-                        userdata.posts.map((post) => <UserPostItem key={post._id} post={post} />)
-                    ) : (
-                        <h2>Không có bài viết</h2>
-                    )}
-                </div>
-            </div>
-        </div>
+            ) : (
+                <div>Loading</div>
+            )}
+        </Fragment>
     );
 };
 

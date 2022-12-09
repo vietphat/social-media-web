@@ -1,47 +1,50 @@
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import AccountItem from '~/components/AccountItem';
 import routes from '~/config/routes';
 import styles from './Suggestions.module.scss';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const cx = classNames.bind(styles);
 
-const friendRequestsReceived = [
-    {
-        _id: 1,
-        username: 'Rick Grimes',
-        avatarUrl: 'https://icdn.dantri.com.vn/thumb_w/640/2021/03/14/hot-girl-9-x-dep-goi-camdocx-1615737535134.jpeg',
-    },
-    {
-        _id: 2,
-        username: 'Carl Grimes',
-        avatarUrl: 'https://luv.vn/wp-content/uploads/2021/08/hot-girl-deo-kinh-16.jpg',
-    },
-    {
-        _id: 3,
-        username: 'Daryl Dixon',
-        avatarUrl: 'https://anhdephd.vn/wp-content/uploads/2022/05/anh-gai-xinh-de-thuong.jpg',
-    },
-];
-
 const Suggestions = ({ classes }) => {
+    const user = useSelector((state) => state.user);
+    const [suggestions, setSuggestions] = useState([]);
+
+    useEffect(() => {
+        const fetchSuggesstions = async () => {
+            const res = await axios.get('http://localhost:8800/api/users/get/random-users', {
+                headers: {
+                    Authorization: 'Bearer ' + user.jwt,
+                },
+            });
+
+            if (res.status === 200) {
+                setSuggestions(res.data.data);
+            }
+        };
+
+        fetchSuggesstions();
+    }, [user]);
+
     return (
         <div className={cx('wrapper', { classes })}>
             <div className={cx('card')}>
-                <Link to={routes.profile}>
-                    <img src="/bjorn.jpg" alt="avatar" />
-                    <p>__vietphat</p>
+                <Link to={routes.profile.replace('userId', user.currentUser._id)}>
+                    <img src={user.currentUser.avatarUrl} alt="avatar" />
+                    <p>{user.currentUser.username}</p>
                 </Link>
             </div>
 
             <div className={cx('friend-requests-container')}>
-                <p>Lời mời kết bạn</p>
+                <p>Gợi ý cho bạn</p>
 
                 <div className={cx('friend-requests')}>
-                    {friendRequestsReceived.map((friendRequest) => (
-                        <AccountItem key={friendRequest._id} {...friendRequest} />
-                    ))}
+                    {suggestions.length > 0 &&
+                        suggestions.map((suggestion) => <AccountItem key={suggestion._id} {...suggestion} />)}
                 </div>
             </div>
 

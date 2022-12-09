@@ -1,6 +1,9 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import classNames from 'classnames/bind';
+import { useDispatch } from 'react-redux';
 
+import httpRequest from '~/utils/httpRequest';
+import { loginStart, loginSuccess, loginFailed } from '~/store';
 import { useForm } from '~/hooks/useForm';
 import { VALIDATOR_EMAIL, VALIDATOR_REQUIRE } from '~/utils/validators';
 import routes from '~/config/routes';
@@ -11,6 +14,10 @@ import styles from './Register.module.scss';
 const cx = classNames.bind(styles);
 
 const Register = () => {
+    const dispatch = useDispatch();
+
+    const navigate = useNavigate();
+
     const [formState, handleInputChange] = useForm(
         {
             username: {
@@ -33,10 +40,24 @@ const Register = () => {
         false,
     );
 
-    const handleRegister = (e) => {
+    const handleRegister = async (e) => {
         e.preventDefault();
 
-        console.log(formState);
+        dispatch(loginStart());
+        try {
+            const res = await httpRequest.post('/auth/register', {
+                email: formState.inputs.email.value,
+                username: formState.inputs.username.value,
+                password: formState.inputs.password.value,
+                confirmPassword: formState.inputs.confirmPassword.value,
+            });
+            if (res.status === 201) {
+                dispatch(loginSuccess({ currentUser: res.data.data, jwt: res.data.token }));
+                navigate('/');
+            }
+        } catch (error) {
+            dispatch(loginFailed());
+        }
     };
 
     return (

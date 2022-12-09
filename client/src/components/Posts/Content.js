@@ -11,7 +11,7 @@ const Content = ({ mediaUrls }) => {
     const [showIndex, setShowIndex] = useState(0);
 
     function checkImageURL(url) {
-        return url.match(/\.(jpeg|jpg|gif|png)$/) != null;
+        return /jpg|png|jpeg/.test(url);
     }
 
     const handlePrevButton = (e) => {

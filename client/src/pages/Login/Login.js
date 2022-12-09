@@ -1,6 +1,9 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import classNames from 'classnames/bind';
+import { useSelector, useDispatch } from 'react-redux';
 
+import httpRequest from '~/utils/httpRequest';
+import { loginStart, loginSuccess, loginFailed } from '~/store';
 import { useForm } from '~/hooks/useForm';
 import { VALIDATOR_EMAIL, VALIDATOR_REQUIRE } from '~/utils/validators';
 import routes from '~/config/routes';
@@ -11,6 +14,12 @@ import styles from './Login.module.scss';
 const cx = classNames.bind(styles);
 
 const Login = () => {
+    const user = useSelector((state) => state.user);
+
+    const dispatch = useDispatch();
+
+    const navigate = useNavigate();
+
     const [formState, handleInputChange] = useForm(
         {
             email: {
@@ -25,10 +34,23 @@ const Login = () => {
         false,
     );
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
 
-        console.log(formState);
+        dispatch(loginStart());
+        try {
+            const res = await httpRequest.post('/auth/signin', {
+                email: formState.inputs.email.value,
+                password: formState.inputs.password.value,
+            });
+
+            if (res.status === 200) {
+                dispatch(loginSuccess({ currentUser: res.data.data, jwt: res.data.token }));
+                navigate('/');
+            }
+        } catch (error) {
+            dispatch(loginFailed());
+        }
     };
 
     return (

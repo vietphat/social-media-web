@@ -45,9 +45,9 @@ const reducer = (state, action) => {
     }
 };
 
-const Input = ({ placeholder, name, id, type = 'text', classNames, onInput, validators }) => {
+const Input = ({ placeholder, name, id, type = 'text', classNames, onInput, validators, multiple = false }) => {
     const [state, dispatch] = useReducer(reducer, {
-        value: '',
+        value: type === 'file' ? [] : '',
         isTouched: false,
         isValid: false,
     });
@@ -71,7 +71,7 @@ const Input = ({ placeholder, name, id, type = 'text', classNames, onInput, vali
         dispatch(touch());
     };
 
-    return (
+    let component = (
         <input
             className={cx('input', classNames)}
             placeholder={placeholder}
@@ -83,6 +83,21 @@ const Input = ({ placeholder, name, id, type = 'text', classNames, onInput, vali
             onBlur={handleTouch}
         />
     );
+    if (type === 'file') {
+        component = (
+            <input
+                className={cx(classNames)}
+                name={name}
+                id={id}
+                type={type}
+                onChange={handleChange}
+                onBlur={handleTouch}
+                multiple={multiple}
+            />
+        );
+    }
+
+    return component;
 };
 
 export default Input;
