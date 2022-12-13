@@ -6,7 +6,7 @@ import axios from 'axios';
 import { Fragment, useState } from 'react';
 
 import { setTimelinePosts } from '~/store';
-import { follow, likePost, unfollow, unlikePost } from '~/store';
+import { follow, unfollow } from '~/store';
 import UserPostItem from './UserPostItem';
 import routes from '~/config/routes';
 import { AddFriendIcon, PostsIcon } from '~/components/Icons';
@@ -22,7 +22,6 @@ const Profile = () => {
     const [userInfo, setUserInfo] = useState();
     const [followingCardShown, setFollowingCardShown] = useState();
     const [followersCardShown, setFollowersCardShown] = useState();
-    const [isLikedPost, setIsLikedPost] = useState();
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -39,48 +38,8 @@ const Profile = () => {
             }
         };
 
-        if (userId !== user.currentUser._id) {
-            fetchUserData();
-        } else {
-            setUserInfo(user.currentUser);
-            dispatch(setTimelinePosts(user.currentUser.posts));
-        }
+        fetchUserData();
     }, [userId, user, dispatch]);
-
-    const handleLikePost = async (postId) => {
-        const config = {
-            headers: {
-                Authorization: `Bearer ${user.jwt}`,
-            },
-        };
-
-        try {
-            const likedPost = posts.find((post) => post._id === postId);
-            const likedUserIndex = likedPost.likes.findIndex((like) => like._id === user.currentUser._id);
-
-            console.log(likedUserIndex);
-            if (likedUserIndex === -1) {
-                const res = await axios.patch(`http://localhost:8800/api/posts/like/${postId}`, {}, config);
-                setIsLikedPost(true);
-                if (res.status === 200) {
-                    dispatch(likePost(res.data.data));
-                }
-            } else {
-                const res = await axios.patch(`http://localhost:8800/api/posts/unlike/${postId}`, {}, config);
-                setIsLikedPost(false);
-                if (res.status === 200) {
-                    dispatch(
-                        unlikePost({
-                            postId,
-                            userId: res.data.data._id,
-                        }),
-                    );
-                }
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    };
 
     const handleFollowAUser = async (e) => {
         e.preventDefault();
@@ -248,14 +207,7 @@ const Profile = () => {
 
                         <div className={cx('posts-list')}>
                             {posts.length > 0 ? (
-                                posts.map((post) => (
-                                    <UserPostItem
-                                        isLikedPost={isLikedPost}
-                                        onLikePost={() => handleLikePost(post._id)}
-                                        key={post._id}
-                                        post={post}
-                                    />
-                                ))
+                                posts.map((post) => <UserPostItem key={post._id} post={post} userInfo={userInfo} />)
                             ) : (
                                 <h2>Không có bài viết</h2>
                             )}

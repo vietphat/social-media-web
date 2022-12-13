@@ -11,16 +11,18 @@ import routes from '~/config/routes';
 import Content from '~/components/Posts/Content';
 import Comment from './Comment';
 import styles from './PostModal.module.scss';
-import { CommentIcon, HappyFaceIcon, MessagesIcon, NotificationsIcon } from '../Icons';
+import { CommentIcon, HappyFaceIcon, MessagesIcon, NotificationsIcon, LikedIcon } from '../Icons';
 import { format } from 'timeago.js/lib/format';
 import { addComment } from '~/store';
 
 const cx = classNames.bind(styles);
 
-const PostModal = ({ isLikedPost, onLikePost, isShowing, hide, ...props }) => {
+const PostModal = ({ isLikedPost, onLikePost, onUnlikePost, isShowing, hide, ...props }) => {
     const user = useSelector((state) => state.user);
     const posts = useSelector((state) => state.timeline.posts);
     const [commentInput, setCommentInput] = useState('');
+
+    console.log(isLikedPost);
 
     const commentsRef = useRef();
 
@@ -98,10 +100,14 @@ const PostModal = ({ isLikedPost, onLikePost, isShowing, hide, ...props }) => {
 
                         <div className={cx('footer')}>
                             <div className={cx('actions')}>
-                                <NotificationsIcon
-                                    className={cx('like-icon', { liked: isLikedPost })}
-                                    onClick={() => onLikePost(props._id)}
-                                />
+                                {!isLikedPost ? (
+                                    <NotificationsIcon
+                                        className={cx('like-icon')}
+                                        onClick={() => onLikePost(props._id)}
+                                    />
+                                ) : (
+                                    <LikedIcon className={cx('like-icon')} onClick={() => onUnlikePost(props._id)} />
+                                )}
                                 <CommentIcon />
                                 <MessagesIcon />
                             </div>

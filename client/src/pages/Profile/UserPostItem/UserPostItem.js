@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import classNames from 'classnames/bind';
+import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios';
 
-import { NotificationsIcon, CommentIcon } from '~/components/Icons';
+import { likePost, unlikePost } from '~/store';
+import { NotificationsIcon, CommentIcon, LikedIcon } from '~/components/Icons';
 import PostModal from '~/components/PostModal';
 import useModal from '~/hooks/useModal';
 import styles from './UserPostItem.module.scss';
@@ -10,7 +13,54 @@ const cx = classNames.bind(styles);
 
 // const UserPostItem = ({ isLikedPost, onLikePost, post }) => {
 const UserPostItem = (props) => {
+    const user = useSelector((state) => state.user);
     const { isShowing, toggle } = useModal();
+    const [isLikedPost, setIsLikedPost] = useState(
+        props.post.likes.findIndex((like) => like._id === user.currentUser._id) !== -1,
+    );
+
+    const dispatch = useDispatch();
+
+    const handleLikePost = async (postId) => {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${user.jwt}`,
+            },
+        };
+
+        try {
+            const res = await axios.patch(`http://localhost:8800/api/posts/like/${postId}`, {}, config);
+            setIsLikedPost(true);
+            if (res.status === 200) {
+                dispatch(likePost(res.data.data));
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const handleUnlikePost = async (postId) => {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${user.jwt}`,
+            },
+        };
+
+        try {
+            const res = await axios.patch(`http://localhost:8800/api/posts/unlike/${postId}`, {}, config);
+            setIsLikedPost(false);
+            if (res.status === 200) {
+                dispatch(
+                    unlikePost({
+                        postId,
+                        userId: res.data.data._id,
+                    }),
+                );
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     function checkImageURL(url) {
         return /jpg|png|jpeg/.test(url);
@@ -26,8 +76,9 @@ const UserPostItem = (props) => {
     return (
         <React.Fragment>
             <PostModal
-                isLikedPost={props.isLikedPost}
-                onLikePost={props.onLikePost}
+                isLikedPost={isLikedPost}
+                onLikePost={() => handleLikePost(props.post._id)}
+                onUnlikePost={() => handleUnlikePost(props.post._id)}
                 isShowing={isShowing}
                 hide={toggle}
                 {...props.post}

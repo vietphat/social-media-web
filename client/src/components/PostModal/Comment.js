@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { useState } from 'react';
 
-import { NotificationsIcon } from '../Icons';
+import { LikedIcon, NotificationsIcon } from '../Icons';
 import styles from './PostModal.module.scss';
 import { likeComment, unlikeComment } from '~/store';
 
@@ -18,7 +18,7 @@ const Comment = ({ comment }) => {
     const [commentWasLiked, setCommentWasLiked] = useState(
         comment.likes.findIndex((like) => like._id === user.currentUser._id) !== -1,
     );
-
+    console.log('commentWasLiked', commentWasLiked);
     const dispatch = useDispatch();
 
     const handleLikeComment = async (commentId, postId) => {
@@ -102,7 +102,11 @@ const Comment = ({ comment }) => {
             </div>
 
             <div onClick={() => handleLikeComment(comment._id, comment.postId)} className={cx('like-comment')}>
-                <NotificationsIcon className={cx({ liked: commentWasLiked })} width="1.6rem" height="1.6rem" />
+                {!commentWasLiked ? (
+                    <NotificationsIcon width="1.6rem" height="1.6rem" />
+                ) : (
+                    <LikedIcon width="1.6rem" height="1.6rem" />
+                )}
             </div>
         </div>
     );

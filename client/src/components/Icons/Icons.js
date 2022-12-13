@@ -301,8 +301,8 @@ export const LikedIcon = ({ width = '2.4rem', height = '2.4rem', className, onCl
         className={className}
         height={height}
         width={width}
-        color="currentColor"
-        fill="currentColor"
+        color="#ed4956"
+        fill="#ed4956"
         role="img"
         viewBox="0 0 48 48"
     >

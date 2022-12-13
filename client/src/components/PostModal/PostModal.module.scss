@@ -141,17 +141,6 @@
                     .like-comment {
                         width: 2rem;
 
-                        .liked {
-                            color: red;
-                            fill: red;
-                            transition: all ease-in-out 100ms;
-
-                            &:hover {
-                                color: rgba(255, 0, 0, 0.753);
-                                fill: rgba(255, 0, 0, 0.753);
-                            }
-                        }
-
                         svg {
                             cursor: pointer;
                         }
@@ -169,25 +158,8 @@
                 gap: 1rem;
                 height: 4.6rem;
 
-                .like-icon.liked {
-                    color: red;
-                    fill: red;
-                    transition: all ease-in-out 100ms;
-
-                    &:hover {
-                        color: rgba(255, 0, 0, 0.753);
-                        fill: rgba(255, 0, 0, 0.753);
-                    }
-                }
-
                 svg {
                     cursor: pointer;
-                    transition: color ease-in-out 100ms;
-
-                    &:hover {
-                        color: rgba(0, 0, 0, 0.519);
-                        fill: rgba(0, 0, 0, 0.519);
-                    }
                 }
             }
 

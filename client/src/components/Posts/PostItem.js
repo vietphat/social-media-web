@@ -6,7 +6,7 @@ import { Fragment, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import Content from './Content';
-import { MoreIcon, NotificationsIcon, MessagesIcon, CommentIcon } from '~/components/Icons';
+import { MoreIcon, NotificationsIcon, LikedIcon, MessagesIcon, CommentIcon } from '~/components/Icons';
 import routes from '~/config/routes';
 import PostModal from '~/components/PostModal';
 import useModal from '~/hooks/useModal';
@@ -36,26 +36,33 @@ const PostItem = (props) => {
         };
 
         try {
-            const likedPost = posts.find((post) => post._id === postId);
-            const likedUserIndex = likedPost.likes.findIndex((like) => like._id === user.currentUser._id);
+            const res = await axios.patch(`http://localhost:8800/api/posts/like/${postId}`, {}, config);
+            setIsLikedPost(true);
+            if (res.status === 200) {
+                dispatch(likePost(res.data.data));
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
-            if (likedUserIndex === -1) {
-                const res = await axios.patch(`http://localhost:8800/api/posts/like/${postId}`, {}, config);
+    const handleUnlikePost = async (postId) => {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${user.jwt}`,
+            },
+        };
 
-                if (res.status === 200) {
-                    dispatch(likePost(res.data.data));
-                }
-            } else {
-                const res = await axios.patch(`http://localhost:8800/api/posts/unlike/${postId}`, {}, config);
-                setIsLikedPost(false);
-                if (res.status === 200) {
-                    dispatch(
-                        unlikePost({
-                            postId,
-                            userId: res.data.data._id,
-                        }),
-                    );
-                }
+        try {
+            const res = await axios.patch(`http://localhost:8800/api/posts/unlike/${postId}`, {}, config);
+            setIsLikedPost(false);
+            if (res.status === 200) {
+                dispatch(
+                    unlikePost({
+                        postId,
+                        userId: res.data.data._id,
+                    }),
+                );
             }
         } catch (error) {
             console.log(error);
@@ -78,6 +85,7 @@ const PostItem = (props) => {
             <PostModal
                 isLikedPost={isLikedPost}
                 onLikePost={handleLikePost}
+                onUnlikePost={handleUnlikePost}
                 isShowing={isShowing}
                 hide={toggle}
                 {...props.post}
@@ -106,10 +114,14 @@ const PostItem = (props) => {
 
                 <div className={cx('footer')}>
                     <div className={cx('actions')}>
-                        <NotificationsIcon
-                            className={cx('like-icon', { liked: isLikedPost })}
-                            onClick={() => handleLikePost(props.post._id)}
-                        />
+                        {!isLikedPost ? (
+                            <NotificationsIcon
+                                className={cx('like-icon')}
+                                onClick={() => handleLikePost(props.post._id)}
+                            />
+                        ) : (
+                            <LikedIcon className={cx('like-icon')} onClick={() => handleUnlikePost(props.post._id)} />
+                        )}
                         <CommentIcon onClick={toggle} />
                         <MessagesIcon />
                     </div>
