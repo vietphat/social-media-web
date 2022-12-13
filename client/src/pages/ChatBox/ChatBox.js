@@ -76,8 +76,6 @@ export default function Messenger() {
         currentChat?._id && getMessages();
     }, [currentChat?._id, user.jwt]);
 
-    console.log('messages', messages);
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         const message = {
@@ -130,11 +128,12 @@ export default function Messenger() {
                 <div className="chatMenu">
                     <div className="chatMenuWrapper">
                         <input placeholder="Tim kiếm" className="chatMenuInput" />
-                        {conversations.map((c) => (
-                            <div onClick={() => setCurrentChat(c)}>
-                                <Conversations key={c._id} conversation={c} currentUser={user.currentUser} />
-                            </div>
-                        ))}
+                        {conversations.length > 0 &&
+                            conversations.map((c) => (
+                                <div onClick={() => setCurrentChat(c)}>
+                                    <Conversations key={c._id} conversation={c} currentUser={user.currentUser} />
+                                </div>
+                            ))}
                     </div>
                 </div>
                 <div className="chatBox">
@@ -143,8 +142,7 @@ export default function Messenger() {
                             <>
                                 <div className="chatBoxTop">
                                     {messages?.length > 0 &&
-                                        messages?.map((m) => {
-                                            console.log('m', m);
+                                        messages.map((m) => {
                                             return (
                                                 <div key={m._id} ref={scrollRef}>
                                                     <Message

@@ -166,6 +166,7 @@ export const NotificationsIcon = ({
     className,
     onClick,
     color = 'currentColor',
+    fill = 'currentColor',
 }) => (
     <svg
         onClick={onClick}
@@ -174,7 +175,7 @@ export const NotificationsIcon = ({
         height={height}
         width={width}
         color={color}
-        fill="currentColor"
+        fill={fill}
         role="img"
         viewBox="0 0 24 24"
         xmlns="http://www.w3.org/2000/svg"

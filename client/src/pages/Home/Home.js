@@ -1,9 +1,8 @@
 import classNames from 'classnames/bind';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
 
-import { setTimelinePosts, fetchTimelinePosts } from '~/store';
+import { fetchTimelinePosts } from '~/store';
 import Posts from '~/components/Posts';
 import UploadPost from '~/components/UploadPost';
 import styles from './Home.module.scss';
@@ -19,8 +18,6 @@ const Home = () => {
     useEffect(() => {
         dispatch(fetchTimelinePosts(user.jwt));
     }, [dispatch, user]);
-
-    console.log(timeline.posts);
 
     // const posts = timeline.posts.sort((postA, postB) => {
     //     return new Date(postB.createdAt) - new Date(postA.createdAt);

@@ -17,7 +17,7 @@ exports.createComment = catchAsync(async (req, res, next) => {
   const createCommentSession = await mongoose.startSession();
   createCommentSession.startTransaction();
 
-  const data = await Comment.create(
+  const comment = await Comment.create(
     [
       {
         createdBy: req.user._id,
@@ -31,16 +31,21 @@ exports.createComment = catchAsync(async (req, res, next) => {
   await Post.findByIdAndUpdate(
     postId,
     {
-      $push: { comments: data[0]._id },
+      $push: { comments: comment[0]._id },
     },
     { session: createCommentSession }
   );
 
   createCommentSession.commitTransaction();
 
+  const data = await Comment.populate(comment[0], {
+    path: 'createdBy',
+    select: 'username avatarUrl',
+  });
+
   return res.status(201).json({
     status: 'Bình luận thành công',
-    data: data[0],
+    data,
   });
 });
 
@@ -96,12 +101,22 @@ exports.likeComment = catchAsync(async (req, res, next) => {
   }
 
   if (!comment.likes.includes(userId)) {
-    await comment.update({
-      $push: { likes: userId },
-    });
+    const updatedComment = await Comment.findByIdAndUpdate(
+      commentId,
+      {
+        $push: { likes: userId },
+      },
+      { new: true }
+    );
+
+    const data = await Comment.populate(updatedComment, [
+      { path: 'createdBy', select: 'username avatarUrl' },
+      { path: 'likes', select: 'username avatar' },
+    ]);
 
     res.status(200).json({
       status: 'Thích bình luận thành công',
+      data,
     });
   } else {
     return next(new AppError('Bạn đã thich bình luận này rồi', 400));
@@ -120,12 +135,22 @@ exports.unlikeComment = catchAsync(async (req, res, next) => {
   }
 
   if (comment.likes.includes(userId)) {
-    await comment.update({
-      $pull: { likes: userId },
-    });
+    const updatedComment = await Comment.findByIdAndUpdate(
+      commentId,
+      {
+        $pull: { likes: userId },
+      },
+      { new: true }
+    );
+
+    const data = await Comment.populate(updatedComment, [
+      { path: 'createdBy', select: 'username avatarUrl' },
+      { path: 'likes', select: 'username avatar' },
+    ]);
 
     res.status(200).json({
-      status: 'Bỏ bình luận thành công',
+      status: 'Bỏ thích bình luận thành công',
+      data,
     });
   } else {
     return next(new AppError('Bạn chưa thich bình luận này', 400));

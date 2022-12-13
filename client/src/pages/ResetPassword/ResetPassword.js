@@ -5,10 +5,20 @@ import routes from '~/config/routes';
 import { Button, Input } from '~/components/AuthForm';
 import images from '~/assets/images';
 import styles from './ResetPassword.module.scss';
+import { useForm } from '~/hooks/useForm';
+import { VALIDATOR_REQUIRE } from '~/utils/validators';
 
 const cx = classNames.bind(styles);
 
 const ResetPassword = () => {
+    const [formState, handleInputChange] = useForm(
+        {
+            password: '',
+            confirmPassword: '',
+        },
+        false,
+    );
+
     return (
         <div className={cx('wrapper')}>
             <div className={cx('container')}>
@@ -20,17 +30,26 @@ const ResetPassword = () => {
                     </div>
 
                     <div className={cx('form-controls')}>
-                        <Input placeholder="Mật khẩu mới" name="password" id="password" type="password" />
                         <Input
+                            onInput={handleInputChange}
+                            placeholder="Mật khẩu mới"
+                            name="password"
+                            id="password"
+                            type="password"
+                            validators={[VALIDATOR_REQUIRE()]}
+                        />
+                        <Input
+                            onInput={handleInputChange}
                             placeholder="Xác nhận mật khẩu"
                             name="confirmPassword"
                             id="confirmPassword"
                             type="password"
+                            validators={[VALIDATOR_REQUIRE()]}
                         />
                     </div>
 
                     <Button disabled className={cx('login-btn')}>
-                        Đổi mật khẩu
+                        Gửi
                     </Button>
                 </form>
 

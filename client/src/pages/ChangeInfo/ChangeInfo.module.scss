@@ -1,0 +1,121 @@
+.wrapper {
+    background-color: var(--primary-background);
+    width: 69.6rem;
+    min-height: 55rem;
+    border: 1px solid var(--elevated-separator);
+    border-radius: .8rem;
+    margin-top: 2rem;
+    margin-left: 15rem;
+
+    .row {
+        margin: 2rem;
+
+        &:first-child {
+            margin-top: 4rem;
+        }
+
+        min-height: 4.2rem;
+        display: flex;
+        align-items: center;
+        gap: 4rem;
+
+
+        .left {
+            width: 19.4rem;
+
+            &:first-child {
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+            }
+
+            .avatar {
+                width: 3.8rem;
+                height: 3.8rem;
+                object-fit: cover;
+                border-radius: 50%;
+                cursor: pointer;
+            }
+
+            input {
+                display: none;
+            }
+
+            label {
+                font-size: 1.6rem;
+                font-weight: 600;
+            }
+        }
+
+        .right {
+            flex: 1;
+
+            &:not(:first) {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .username {
+                font-size: 2rem;
+                font-weight: 500;
+            }
+
+            input {
+                width: 35.5rem;
+                height: 3.2rem;
+                border: 1px solid var(--elevated-separator);
+                border-radius: .3rem;
+                padding: 1rem 1rem;
+            }
+
+            .avatar-input {
+                cursor: pointer;
+                color: var(--success-text);
+                font-size: 1.4rem;
+                font-weight: 500;
+
+                input {
+                    display: none;
+                }
+            }
+
+            .submit-btn {
+                background-color: var(--primary-button);
+                color: #fff;
+                border-radius: .5rem;
+                padding: .8rem 1rem;
+            }
+
+            .formIsNotValid {
+                pointer-events: none;
+                opacity: 0.5;
+            }
+
+            .feedback {
+                color: var(--error-text);
+                font-size: 1.4rem;
+            }
+        }
+    }
+
+    .line {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin: 3rem 0;
+
+        hr {
+            width: 80%;
+            text-align: center;
+            display: block;
+            height: 1px;
+            border: 0;
+            border-top: 1px solid #ccc;
+            margin: 1em 0;
+            padding: 0;
+        }
+    }
+
+
+}

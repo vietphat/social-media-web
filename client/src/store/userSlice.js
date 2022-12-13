@@ -32,6 +32,18 @@ const userSlice = createSlice({
             state.loading = false;
             state.error = false;
         },
+        follow(state, action) {
+            state.currentUser.following = action.payload;
+        },
+        unfollow(state, action) {
+            state.currentUser.following.splice(
+                state.currentUser.following.findIndex((item) => item._id === action.payload),
+                1,
+            );
+        },
+        replaceUserData(state, action) {
+            state.currentUser = action.payload;
+        },
         // subscribe(state, action) {
         //   // un
         //   if (state.currentUser.subscribedUsers.includes(action.payload)) {
@@ -49,6 +61,6 @@ const userSlice = createSlice({
     },
 });
 
-export const { loginStart, loginSuccess, loginFailed, logout } = userSlice.actions;
+export const { loginStart, loginSuccess, loginFailed, logout, follow, unfollow, replaceUserData } = userSlice.actions;
 
 export default userSlice.reducer;

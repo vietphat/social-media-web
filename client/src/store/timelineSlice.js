@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import store from './index';
 
 const initialState = {
     posts: [],
@@ -15,6 +14,26 @@ const timelineSlice = createSlice({
         },
         createPost(state, action) {
             state.posts = [action.payload, ...state.posts];
+        },
+        likePost(state, action) {
+            state.posts[state.posts.findIndex((post) => post._id === action.payload._id)] = action.payload;
+        },
+        unlikePost(state, action) {
+            const unlikedPostIndex = state.posts.findIndex((post) => post._id === action.payload.postId);
+
+            state.posts[unlikedPostIndex].likes.splice(action.payload.userId, 1);
+        },
+        addComment(state, action) {
+            state.posts[action.payload.postIndex].comments.push(action.payload.comment);
+        },
+        likeComment(state, action) {
+            state.posts[action.payload.postIndex].comments[action.payload.commentIndex] = action.payload.comment;
+        },
+        unlikeComment(state, action) {
+            state.posts[action.payload.postIndex].comments[action.payload.commentIndex].likes.splice(
+                action.payload.likeIndex,
+                1,
+            );
         },
     },
 });
@@ -33,6 +52,7 @@ export const fetchTimelinePosts = (jwt) => {
     };
 };
 
-export const { setTimelinePosts, createPost } = timelineSlice.actions;
+export const { setTimelinePosts, createPost, likePost, unlikePost, addComment, likeComment, unlikeComment } =
+    timelineSlice.actions;
 
 export default timelineSlice.reducer;

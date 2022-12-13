@@ -50,19 +50,45 @@ exports.getUser = catchAsync(async (req, res, next) => {
   });
 });
 
+// Get users by name or email
+exports.searchUsersByNameOrEmail = catchAsync(async (req, res, next) => {
+  const { searchInput: search } = req.params;
+
+  const users = await User.find({
+    $or: [
+      {
+        username: { $regex: search, $options: 'i' },
+      },
+      {
+        email: { $regex: search, $options: 'i' },
+      },
+    ],
+  });
+
+  res.status(200).json({
+    status: 'Thành công',
+    length: users.length,
+    data: users,
+  });
+});
+
 // Get random users
 exports.getRandomUsers = catchAsync(async (req, res, next) => {
   const data = await User.aggregate([
     { $sample: { size: 5 } },
     {
       $match: {
-        _id: { $ne: req.user._id },
+        _id: {
+          $ne: req.user._id,
+          $nin: [...req.user.following, ...req.user?.friendsList],
+        },
       },
     },
   ]);
 
   res.status(200).json({
     status: 'Thành công',
+    length: data.length,
     data,
   });
 });
@@ -97,11 +123,36 @@ exports.updateInformations = catchAsync(async (req, res, next) => {
       runValidators: true,
       new: true, // tránh thay đổi trường passwordChangedAt
     }
-  );
+  ).populate([
+    { path: 'followers', select: 'username avatarUrl' },
+    { path: 'following', select: 'username avatarUrl' },
+    { path: 'friendsList', select: 'username avatarUrl' },
+    {
+      path: 'posts',
+      populate: [
+        {
+          path: 'createdBy',
+          select: 'username avatar',
+        },
+        {
+          path: 'likes',
+          select: 'username avatar',
+        },
+        {
+          path: 'comments',
+          select: 'createdBy description createdAt likes',
+          populate: [
+            { path: 'createdBy', select: 'username avatar' },
+            { path: 'likes', select: 'username avatar' },
+          ],
+        },
+      ],
+    },
+  ]);
 
   res.status(200).json({
     status: 'Cập nhật thành công',
-    user,
+    data: user,
   });
 });
 
@@ -114,13 +165,16 @@ exports.follow = catchAsync(async (req, res, next) => {
       const followingSession = await mongoose.startSession();
       followingSession.startTransaction();
 
-      await User.findByIdAndUpdate(
+      const data = await User.findByIdAndUpdate(
         userId,
         {
           $push: { following: followedUserId },
         },
-        { session: followingSession }
-      );
+        { session: followingSession, new: true }
+      ).populate({
+        path: 'following',
+        select: 'username avatarUrl',
+      });
 
       await User.findByIdAndUpdate(
         followedUserId,
@@ -135,6 +189,7 @@ exports.follow = catchAsync(async (req, res, next) => {
       res.status(200).json({
         status: 'Thành công',
         message: 'Theo dõi người dùng thành công',
+        data,
       });
     } else {
       return next(new AppError('Bạn đã theo dõi tài khoản này rồi', 400));

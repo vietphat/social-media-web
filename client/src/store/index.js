@@ -26,8 +26,17 @@ const store = configureStore({
 
 const persistor = persistStore(store);
 
-export { loginStart, loginSuccess, loginFailed, logout } from './userSlice';
-export { setTimelinePosts, createPost, fetchTimelinePosts } from './timelineSlice';
+export { loginStart, loginSuccess, loginFailed, logout, follow, unfollow, replaceUserData } from './userSlice';
+export {
+    setTimelinePosts,
+    createPost,
+    fetchTimelinePosts,
+    likePost,
+    unlikePost,
+    likeComment,
+    unlikeComment,
+    addComment,
+} from './timelineSlice';
 
 // export { fetchStart, fetchSuccess, fetchFailed, like, dislike } from './postsSlice';
 export { persistor };

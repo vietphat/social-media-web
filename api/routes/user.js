@@ -5,12 +5,15 @@ const authController = require('./../controllers/authController');
 
 const router = express.Router();
 
+// Search users by name or email
+router.get('/search/:searchInput', userController.searchUsersByNameOrEmail);
+
 // Get a user
 router.get('/:userId', userController.getUser);
 
 router.use(authController.protect);
 
-// Get random user
+// Get random users
 router.get('/get/random-users', userController.getRandomUsers);
 
 // Update user informations

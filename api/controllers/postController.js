@@ -173,10 +173,37 @@ exports.likePost = catchAsync(async (req, res, next) => {
   const { postId } = req.params;
 
   const post = await Post.findById(postId);
-  if (!post.likes.includes(postId)) {
+
+  if (
+    post.likes.findIndex(
+      (like) => like._id.toString() === req.user._id.toString()
+    ) === -1
+  ) {
     post.likes.push(req.user.id);
 
-    const data = await post.save();
+    const data = await (
+      await post.save()
+    ).populate([
+      {
+        path: 'createdBy',
+        select: 'username avatarUrl',
+      },
+      {
+        path: 'likes',
+        select: 'username avatarUrl',
+      },
+      {
+        path: 'comments',
+        select: 'createdBy description createdAt likes',
+        populate: [
+          {
+            path: 'createdBy',
+            select: 'username avatarUrl',
+          },
+          { path: 'likes', select: 'username avatarUrl' },
+        ],
+      },
+    ]);
 
     res.status(200).json({
       status: 'Thích bài đăng thành công',
@@ -192,12 +219,14 @@ exports.unlikePost = catchAsync(async (req, res, next) => {
   const { postId } = req.params;
 
   const post = await Post.findById(postId);
-  if (post.likes.includes(req.user.id)) {
-    post.likes = [
-      ...post.likes.filter((likedUserId) => {
-        if (likedUserId.toString() !== req.user.id) return likedUserId;
-      }),
-    ];
+
+  const likedUserIdIndex = post.likes.findIndex(
+    (like) => like._id.toString() === req.user._id.toString()
+  );
+
+  if (likedUserIdIndex !== -1) {
+    console.log(likedUserIdIndex);
+    post.likes.splice(likedUserIdIndex, 1);
 
     const data = await post.save();
 

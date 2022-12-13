@@ -8,8 +8,8 @@ import styles from './UserPostItem.module.scss';
 
 const cx = classNames.bind(styles);
 
-const UserPostItem = ({ post }) => {
-    console.log(post);
+// const UserPostItem = ({ isLikedPost, onLikePost, post }) => {
+const UserPostItem = (props) => {
     const { isShowing, toggle } = useModal();
 
     function checkImageURL(url) {
@@ -17,24 +17,30 @@ const UserPostItem = ({ post }) => {
     }
 
     let content;
-    if (checkImageURL(post.mediaUrls[0])) {
-        content = <img src={post.mediaUrls[0]} alt="user-post-item" />;
+    if (checkImageURL(props.post.mediaUrls[0])) {
+        content = <img src={props.post.mediaUrls[0]} alt="user-post-item" />;
     } else {
-        content = <video src={post.mediaUrls[0]} />;
+        content = <video src={props.post.mediaUrls[0]} />;
     }
 
     return (
         <React.Fragment>
-            <PostModal isShowing={isShowing} hide={toggle} {...post} />
+            <PostModal
+                isLikedPost={props.isLikedPost}
+                onLikePost={props.onLikePost}
+                isShowing={isShowing}
+                hide={toggle}
+                {...props.post}
+            />
             <div onClick={toggle} className={cx('user-post-item')}>
                 <div className={cx('interactions-container')}>
                     <div className={cx('interactions')}>
                         <NotificationsIcon />
-                        <span>{post.likes.length}</span>
+                        <span>{props.post.likes.length}</span>
                     </div>
                     <div className={cx('interactions')}>
                         <CommentIcon />
-                        <span>{post.likes.length}</span>
+                        <span>{props.post.likes.length}</span>
                     </div>
                 </div>
                 {content}

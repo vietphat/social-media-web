@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
 
 import routes from '~/config/routes';
 import Content from '~/components/Posts/Content';
@@ -11,10 +13,59 @@ import Comment from './Comment';
 import styles from './PostModal.module.scss';
 import { CommentIcon, HappyFaceIcon, MessagesIcon, NotificationsIcon } from '../Icons';
 import { format } from 'timeago.js/lib/format';
+import { addComment } from '~/store';
 
 const cx = classNames.bind(styles);
 
-const PostModal = ({ isShowing, hide, ...props }) => {
+const PostModal = ({ isLikedPost, onLikePost, isShowing, hide, ...props }) => {
+    const user = useSelector((state) => state.user);
+    const posts = useSelector((state) => state.timeline.posts);
+    const [commentInput, setCommentInput] = useState('');
+
+    const commentsRef = useRef();
+
+    const dispatch = useDispatch();
+
+    const handleAddComment = async (postId) => {
+        if (commentInput.trim() === '') return;
+        const config = {
+            headers: {
+                Authorization: `Bearer ${user.jwt}`,
+            },
+        };
+
+        try {
+            const res = await axios.post(
+                `http://localhost:8800/api/comments/create/${postId}`,
+                {
+                    description: commentInput,
+                },
+                config,
+            );
+
+            const postIndex = posts.findIndex((post) => post._id === postId);
+
+            if (res.status === 201) {
+                setCommentInput('');
+
+                dispatch(
+                    addComment({
+                        postIndex,
+                        comment: res.data.data,
+                    }),
+                );
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const { comments } = props;
+    const { length } = comments;
+    useEffect(() => {
+        commentsRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [length]);
+
     let modal;
     if (isShowing) {
         modal = ReactDOM.createPortal(
@@ -38,14 +89,19 @@ const PostModal = ({ isShowing, hide, ...props }) => {
                         <div className={cx('body')}>
                             <div className={cx('comments')}>
                                 {props.comments.map((comment) => (
-                                    <Comment key={comment._id} comment={comment} />
+                                    <div key={comment._id} ref={commentsRef}>
+                                        <Comment key={comment._id} comment={comment} />
+                                    </div>
                                 ))}
                             </div>
                         </div>
 
                         <div className={cx('footer')}>
                             <div className={cx('actions')}>
-                                <NotificationsIcon />
+                                <NotificationsIcon
+                                    className={cx('like-icon', { liked: isLikedPost })}
+                                    onClick={() => onLikePost(props._id)}
+                                />
                                 <CommentIcon />
                                 <MessagesIcon />
                             </div>
@@ -63,8 +119,16 @@ const PostModal = ({ isShowing, hide, ...props }) => {
                                     <HappyFaceIcon />
                                 </div>
                                 <div className={cx('enter')}>
-                                    <input type="text" placeholder="Thêm bình luận..." />
-                                    <button>Đăng</button>
+                                    <input
+                                        onKeyDown={(e) => {
+                                            e.key === 'Enter' && handleAddComment(props._id);
+                                        }}
+                                        value={commentInput}
+                                        onChange={(e) => setCommentInput(e.target.value)}
+                                        type="text"
+                                        placeholder="Thêm bình luận..."
+                                    />
+                                    <button onClick={() => handleAddComment(props._id)}>Đăng</button>
                                 </div>
                             </div>
                         </div>

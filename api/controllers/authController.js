@@ -31,7 +31,7 @@ const createAndSendToken = async (user, res, req, statusCode) => {
 
   const data = await User.populate(user, [
     { path: 'followers', select: 'username avatarUrl' },
-    { path: 'followering', select: 'username avatarUrl' },
+    { path: 'following', select: 'username avatarUrl' },
     { path: 'friendsList', select: 'username avatarUrl' },
     {
       path: 'posts',

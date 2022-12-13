@@ -33,7 +33,7 @@ const Suggestions = ({ classes }) => {
     return (
         <div className={cx('wrapper', { classes })}>
             <div className={cx('card')}>
-                <Link to={routes.profile.replace('userId', user.currentUser._id)}>
+                <Link to={routes.profile.replace(':userId', user.currentUser._id)}>
                     <img src={user.currentUser.avatarUrl} alt="avatar" />
                     <p>{user.currentUser.username}</p>
                 </Link>

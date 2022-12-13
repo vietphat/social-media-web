@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import classNames from 'classnames/bind';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import httpRequest from '~/utils/httpRequest';
 import { loginStart, loginSuccess, loginFailed } from '~/store';
@@ -14,8 +14,6 @@ import styles from './Login.module.scss';
 const cx = classNames.bind(styles);
 
 const Login = () => {
-    const user = useSelector((state) => state.user);
-
     const dispatch = useDispatch();
 
     const navigate = useNavigate();

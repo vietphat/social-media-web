@@ -2,7 +2,13 @@ import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faClose } from '@fortawesome/free-solid-svg-icons';
+import { useRef } from 'react';
+import axios from 'axios';
 
+import useDebounce from '~/hooks/useDebounce';
 import httpRequest from '~/utils/httpRequest';
 import { logout } from '~/store';
 import { HomeIcon, MessagesIcon, SearchIcon, NotificationsIcon, LogoutIcon } from '~/components/Icons';
@@ -14,8 +20,16 @@ const cx = classNames.bind(styles);
 
 const Sidebar = ({ classes }) => {
     const user = useSelector((state) => state.user);
+    const [searchShown, setSearchShown] = useState(false);
+    const [searchInput, setSearchInput] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    const searchInputRef = useRef();
 
     const dispatch = useDispatch();
+
+    const debouncedValue = useDebounce(searchInput, 500);
 
     const handleLogout = async (e) => {
         e.preventDefault();
@@ -24,6 +38,33 @@ const Sidebar = ({ classes }) => {
 
         dispatch(logout());
     };
+
+    const handleSearchInputChange = (e) => {
+        setSearchInput(e.target.value.trimStart());
+    };
+
+    useEffect(() => {
+        if (!debouncedValue.trim()) {
+            setSearchResults([]);
+            return;
+        }
+
+        const fetchUser = async () => {
+            setLoading(true);
+            try {
+                const res = await axios.get(`http://localhost:8800/api/users/search/${debouncedValue}`);
+
+                if (res.status === 200) {
+                    setSearchResults(res.data.data);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+            setLoading(false);
+        };
+
+        fetchUser();
+    }, [debouncedValue]);
 
     return (
         <div className={cx('wrapper', classes)}>
@@ -42,7 +83,7 @@ const Sidebar = ({ classes }) => {
                         <span className={cx('title')}>{'Trang chủ'}</span>
                     </Link>
 
-                    <button className={cx('menu-item')}>
+                    <button onClick={() => setSearchShown((prev) => !prev)} className={cx('menu-item')}>
                         <span className={cx('icon')}>
                             <SearchIcon />
                         </span>
@@ -76,6 +117,41 @@ const Sidebar = ({ classes }) => {
                         </span>
                         <span className={cx('title')}>{'Đăng xuất'}</span>
                     </button>
+                    {searchShown && (
+                        <section className={cx('search-section')}>
+                            <header className={cx('header')}>
+                                <h4>Tìm kiếm</h4>
+
+                                <div className={cx('search-input')}>
+                                    <input
+                                        ref={searchInputRef}
+                                        onChange={handleSearchInputChange}
+                                        value={searchInput}
+                                        type="text"
+                                        placeholder="Nhập tên người dùng"
+                                    />
+                                    <FontAwesomeIcon onClick={() => setSearchInput('')} icon={faClose} />
+                                </div>
+                            </header>
+
+                            <div className={cx('search-results')}>
+                                {loading ? (
+                                    <div className={cx('loading')}>Đang tìm...</div>
+                                ) : (
+                                    searchResults.map((result) => (
+                                        <Link key={result._id} to={routes.profile.replace(':userId', result._id)}>
+                                            <img src={result.avatarUrl} alt="" />
+
+                                            <div className={cx('result-item')}>
+                                                <h5>{result.username}</h5>
+                                                <span>{result.email}</span>
+                                            </div>
+                                        </Link>
+                                    ))
+                                )}
+                            </div>
+                        </section>
+                    )}
                 </nav>
             </div>
         </div>
