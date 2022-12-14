@@ -98,6 +98,23 @@ exports.signin = catchAsync(async (req, res, next) => {
   await createAndSendToken(user, res, req, 200);
 });
 
+// Sign in with google
+exports.signinWithGoogle = catchAsync(async (req, res, next) => {
+  const { email, username } = req.body;
+
+  const user = await User.findOne({ email });
+
+  if (user) {
+    await createAndSendToken(user, res, req, 200);
+  } else {
+    const newUser = new User({ email, username, fromGoogleAccount: true });
+    const savedUser = await newUser.save({ validateBeforeSave: false });
+
+    await new Email(savedUser, process.env.DEV_DOMAIN).sendWelcome();
+    await createAndSendToken(savedUser, res, req, 200);
+  }
+});
+
 // Sign out
 exports.signout = catchAsync(async (req, res, next) => {
   // xóa cookie jwt và cho nó hết hạn ngay lập tức

@@ -102,9 +102,6 @@ const PostItem = (props) => {
                             {props.post.createdBy.username}
                         </Link>
                     </div>
-                    <div className={cx('more-btn')}>
-                        <MoreIcon />
-                    </div>
                 </div>
 
                 <div className={cx('body')}>
@@ -122,7 +119,6 @@ const PostItem = (props) => {
                             <LikedIcon className={cx('like-icon')} onClick={() => handleUnlikePost(props.post._id)} />
                         )}
                         <CommentIcon onClick={toggle} />
-                        <MessagesIcon />
                     </div>
 
                     <h5 onClick={handleShowLikedUsers}>{props.post.likes.length} người thích</h5>

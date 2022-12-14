@@ -77,7 +77,7 @@ export default function Messenger() {
     }, [currentChat?._id, user.jwt]);
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        e?.preventDefault();
         const message = {
             createdBy: user.currentUser._id,
             text: newMessage,
@@ -127,7 +127,6 @@ export default function Messenger() {
             <div className="messenger">
                 <div className="chatMenu">
                     <div className="chatMenuWrapper">
-                        <input placeholder="Tim kiếm" className="chatMenuInput" />
                         {conversations.length > 0 &&
                             conversations.map((c) => (
                                 <div onClick={() => setCurrentChat(c)}>
@@ -158,6 +157,11 @@ export default function Messenger() {
                                     <textarea
                                         className="chatMessageInput"
                                         placeholder="Nhập tin nhắn..."
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') {
+                                                e.preventDefault(handleSubmit());
+                                            }
+                                        }}
                                         onChange={(e) => setNewMessage(e.target.value)}
                                         value={newMessage}
                                     ></textarea>

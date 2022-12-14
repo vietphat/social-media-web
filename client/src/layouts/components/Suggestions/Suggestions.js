@@ -48,7 +48,7 @@ const Suggestions = ({ classes }) => {
                 </div>
             </div>
 
-            <p className={cx('footer')}>© 2022 INSTAGRAM FROM META</p>
+            <p className={cx('footer')}>© 2022 INSTAGRAM CLONE by Phat</p>
         </div>
     );
 };

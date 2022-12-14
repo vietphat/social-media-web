@@ -111,14 +111,10 @@ const userSchema = new mongoose.Schema(
       ],
       default: [],
     },
-    // likedPosts: {
-    //   type: [
-    //     {
-    //       type: mongoose.Schema.ObjectId,
-    //       ref: 'Post',
-    //     },
-    //   ],
-    // },
+    fromGoogleAccount: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

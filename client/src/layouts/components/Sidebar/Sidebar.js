@@ -11,7 +11,7 @@ import axios from 'axios';
 import useDebounce from '~/hooks/useDebounce';
 import httpRequest from '~/utils/httpRequest';
 import { logout } from '~/store';
-import { HomeIcon, MessagesIcon, SearchIcon, NotificationsIcon, LogoutIcon } from '~/components/Icons';
+import { HomeIcon, MessagesIcon, SearchIcon, NotificationsIcon, LogoutIcon, ExploreIcon } from '~/components/Icons';
 import routes from '~/config/routes';
 import images from '~/assets/images';
 import styles from './Sidebar.module.scss';
@@ -90,6 +90,13 @@ const Sidebar = ({ classes }) => {
                         <span className={cx('title')}>{'Tìm kiếm'}</span>
                     </button>
 
+                    <Link to={routes.explore} className={cx('menu-item')}>
+                        <span className={cx('icon')}>
+                            <ExploreIcon />
+                        </span>
+                        <span className={cx('title')}>{'Khám phá'}</span>
+                    </Link>
+
                     <Link to={routes.chatbox} className={cx('menu-item')}>
                         <span className={cx('icon')}>
                             <MessagesIcon />
@@ -97,12 +104,12 @@ const Sidebar = ({ classes }) => {
                         <span className={cx('title')}>{'Nhắn tin'}</span>
                     </Link>
 
-                    <button className={cx('menu-item')}>
+                    <Link to={routes.liked} className={cx('menu-item')}>
                         <span className={cx('icon')}>
                             <NotificationsIcon />
                         </span>
-                        <span className={cx('title')}>{'Thông báo'}</span>
-                    </button>
+                        <span className={cx('title')}>{'Đã thích'}</span>
+                    </Link>
 
                     <Link to={routes.profile.replace(':userId', user.currentUser._id)} className={cx('menu-item')}>
                         <span className={cx('icon')}>

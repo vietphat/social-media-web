@@ -5,16 +5,19 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import React, { useState } from 'react';
 
+import { auth, provider } from '~/utils/firebase';
 import httpRequest from '~/utils/httpRequest';
 import { loginStart, loginSuccess, loginFailed } from '~/store';
 import { useForm } from '~/hooks/useForm';
 import { VALIDATOR_EMAIL, VALIDATOR_REQUIRE } from '~/utils/validators';
 import routes from '~/config/routes';
 import { Button, Input } from '~/components/AuthForm';
-import images from '~/assets/images';
-import styles from './Register.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { GoogleIcon } from '~/components/Icons';
+import { signInWithPopup } from 'firebase/auth';
+import images from '~/assets/images';
+import styles from './Register.module.scss';
 
 const cx = classNames.bind(styles);
 
@@ -83,6 +86,26 @@ const Register = () => {
         }
     };
 
+    const handleSigninWithGoogle = async (e) => {
+        e.preventDefault();
+        dispatch(loginStart());
+        signInWithPopup(auth, provider)
+            .then((result) => {
+                httpRequest
+                    .post('/auth/signin-with-google', {
+                        username: result.user.displayName,
+                        email: result.user.email,
+                    })
+                    .then((res) => {
+                        dispatch(loginSuccess({ currentUser: res.data.data, jwt: res.data.token }));
+                        navigate('/');
+                    });
+            })
+            .catch((error) => {
+                dispatch(loginFailed());
+            });
+    };
+
     return (
         <React.Fragment>
             <div className={cx('wrapper')}>
@@ -95,8 +118,8 @@ const Register = () => {
                         </div>
                         <p className={cx('title')}>Đăng nhập để xem hình ảnh và video của bạn bè.</p>
 
-                        <Button disabled={loading} rounded className={cx('gmail-login-button')}>
-                            Đăng nhập bằng gmail
+                        <Button onClick={handleSigninWithGoogle} rounded className={cx('gmail-login-button')}>
+                            <GoogleIcon /> Đăng nhập bằng Google
                         </Button>
 
                         <div className={cx('separation-line')}>

@@ -9,10 +9,10 @@ import { setTimelinePosts } from '~/store';
 import { follow, unfollow } from '~/store';
 import UserPostItem from './UserPostItem';
 import routes from '~/config/routes';
-import { AddFriendIcon, PostsIcon } from '~/components/Icons';
 import styles from './Profile.module.scss';
 import { useEffect } from 'react';
 import UsersListModal from '~/components/UsersListModal';
+import { PostsIcon } from '~/components/Icons';
 
 const cx = classNames.bind(styles);
 
@@ -107,7 +107,9 @@ const Profile = () => {
 
     let followComponent;
     if (!(userInfo?._id === user.currentUser._id)) {
-        user.currentUser.following.includes(userInfo?._id)
+        console.log('user.currentUser.following', user.currentUser.following);
+        console.log('userInfo?._id', userInfo?._id);
+        user.currentUser.following.findIndex((followUser) => followUser._id === userInfo?._id) !== -1
             ? (followComponent = (
                   <button onClick={handleUnfollowAUser} className={cx('follow-btn')}>
                       Bỏ theo dõi
@@ -123,22 +125,6 @@ const Profile = () => {
             <Link to={routes.changeInfo} className={cx('follow-btn')}>
                 Sửa thông tin cá nhân
             </Link>
-        );
-    }
-
-    let addFriendComponent;
-    if (!(userInfo?._id === user.currentUser._id)) {
-        addFriendComponent = (
-            <>
-                {' '}
-                <button onClick={handleCreateConversation} className={cx('inbox-btn')}>
-                    Nhắn tin
-                </button>
-                <button className={cx('add-friend-btn')}>
-                    <AddFriendIcon />
-                    {/* Hủy kết bạn */}
-                </button>
-            </>
         );
     }
 
@@ -173,7 +159,9 @@ const Profile = () => {
 
                                 <div className={cx('action-btns')}>
                                     {followComponent}
-                                    {addFriendComponent}
+                                    <button onClick={handleCreateConversation} className={cx('inbox-btn')}>
+                                        Nhắn tin
+                                    </button>
                                 </div>
                             </div>
 

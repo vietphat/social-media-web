@@ -28,4 +28,10 @@ router.get('/get/:postId', postController.getPost);
 // get timeline posts
 router.get('/get-timeline-posts', postController.getTimelinePosts);
 
+// get liked posts
+router.get('/get-liked-posts', postController.getLikedPosts);
+
+// get all posts
+router.get('/get-all-posts', postController.getAllPosts);
+
 module.exports = router;

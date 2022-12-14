@@ -1,0 +1,36 @@
+.wrapper {
+    width: 85%;
+    margin-top: 5rem;
+
+    .posts {
+        border-top: 1px solid var(--elevated-separator);
+
+        .posts-btn {
+            margin: 1rem 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: .5rem;
+            font-weight: 500;
+
+            svg {}
+
+            span {}
+        }
+
+        .posts-list {
+
+            h2 {
+                padding-top: 5rem;
+                text-align: center;
+                font-weight: 300;
+                margin-left: 38rem;
+            }
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+    }
+}

@@ -14,7 +14,6 @@ const Home = () => {
     const timeline = useSelector((state) => state.timeline);
 
     const dispatch = useDispatch();
-
     useEffect(() => {
         dispatch(fetchTimelinePosts(user.jwt));
     }, [dispatch, user]);

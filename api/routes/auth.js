@@ -10,6 +10,9 @@ router.post('/register', authController.register);
 // Sign in
 router.post('/signin', authController.signin);
 
+// Sign in with google
+router.post('/signin-with-google', authController.signinWithGoogle);
+
 // Sign out
 router.get('/signout', authController.signout);
 

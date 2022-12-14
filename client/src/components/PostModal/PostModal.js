@@ -22,8 +22,6 @@ const PostModal = ({ isLikedPost, onLikePost, onUnlikePost, isShowing, hide, ...
     const posts = useSelector((state) => state.timeline.posts);
     const [commentInput, setCommentInput] = useState('');
 
-    console.log(isLikedPost);
-
     const commentsRef = useRef();
 
     const dispatch = useDispatch();
@@ -109,7 +107,6 @@ const PostModal = ({ isLikedPost, onLikePost, onUnlikePost, isShowing, hide, ...
                                     <LikedIcon className={cx('like-icon')} onClick={() => onUnlikePost(props._id)} />
                                 )}
                                 <CommentIcon />
-                                <MessagesIcon />
                             </div>
 
                             <h5>{props.likes.length} người thích</h5>

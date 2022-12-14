@@ -11,6 +11,8 @@ import ResetPassword from '~/pages/ResetPassword';
 import Inbox from '~/pages/Inbox';
 import ChatBox from '~/pages/ChatBox';
 import ChangeInfo from '~/pages/ChangeInfo';
+import Liked from '~/pages/Liked';
+import Explore from '~/pages/Explore/Explore';
 
 // public routes
 const publicRoutes = [
@@ -27,6 +29,8 @@ const privateRoutes = [
     { path: config.routes.inbox, component: Inbox, layout: NoSuggestionsLayout },
     { path: config.routes.chatbox, component: ChatBox, layout: NoSuggestionsLayout },
     { path: config.routes.changeInfo, component: ChangeInfo, layout: NoSuggestionsLayout },
+    { path: config.routes.liked, component: Liked, layout: NoSuggestionsLayout },
+    { path: config.routes.explore, component: Explore, layout: NoSuggestionsLayout },
 ];
 
 export { publicRoutes, privateRoutes };

@@ -1,9 +1,13 @@
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import { useDispatch } from 'react-redux';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { signInWithPopup } from 'firebase/auth';
 
+import { GoogleIcon } from '~/components/Icons';
+import { auth, provider } from '~/utils/firebase';
 import httpRequest from '~/utils/httpRequest';
 import { loginStart, loginSuccess, loginFailed } from '~/store';
 import { useForm } from '~/hooks/useForm';
@@ -12,7 +16,6 @@ import routes from '~/config/routes';
 import { Button, Input } from '~/components/AuthForm';
 import images from '~/assets/images';
 import styles from './Login.module.scss';
-import React from 'react';
 
 const cx = classNames.bind(styles);
 
@@ -76,6 +79,26 @@ const Login = () => {
         }
     };
 
+    const handleSigninWithGoogle = async (e) => {
+        e.preventDefault();
+        dispatch(loginStart());
+        signInWithPopup(auth, provider)
+            .then((result) => {
+                httpRequest
+                    .post('/auth/signin-with-google', {
+                        username: result.user.displayName,
+                        email: result.user.email,
+                    })
+                    .then((res) => {
+                        dispatch(loginSuccess({ currentUser: res.data.data, jwt: res.data.token }));
+                        navigate('/');
+                    });
+            })
+            .catch((error) => {
+                dispatch(loginFailed());
+            });
+    };
+
     return (
         <React.Fragment>
             <div className={cx('wrapper')}>
@@ -115,8 +138,8 @@ const Login = () => {
                             <hr className={cx('right-line')} />
                         </div>
 
-                        <Button rounded className={cx('gmail-login-button')}>
-                            Đăng nhập bằng gmail
+                        <Button onClick={handleSigninWithGoogle} rounded className={cx('gmail-login-button')}>
+                            <GoogleIcon /> Đăng nhập bằng Google
                         </Button>
 
                         <Link className={cx('forgot-password-btn')} to={routes.forgotPassword}>

@@ -3,6 +3,7 @@ const AppError = require('../utils/AppError');
 const Post = require('./../models/Post');
 const User = require('./../models/User');
 const catchAsync = require('./../utils/catchAsync');
+const shuffle = require('./../utils/shuffle');
 
 // get a post
 exports.getPost = catchAsync(async (req, res, next) => {
@@ -46,6 +47,32 @@ exports.getTimelinePosts = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: 'Thành công',
+    data,
+  });
+});
+
+// get liked posts
+exports.getLikedPosts = catchAsync(async (req, res, next) => {
+  const { id: userId } = req.user;
+
+  const data = await Post.find({ likes: { $in: userId } });
+
+  res.status(200).json({
+    status: 'Thành công',
+    length: data.length,
+    data,
+  });
+});
+
+// get all posts
+exports.getAllPosts = catchAsync(async (req, res, next) => {
+  const posts = await Post.find();
+
+  const data = shuffle(posts);
+
+  res.status(200).json({
+    status: 'Thành công',
+    length: data.length,
     data,
   });
 });

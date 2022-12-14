@@ -297,86 +297,90 @@ const ChangeInfo = () => {
             </div>
 
             {/* CHANGE PASSWORD */}
-            <div className={cx('row')}>
-                <div className={cx('left')}></div>
+            {!user.currentUser.fromGoogleAccount && (
+                <>
+                    <div className={cx('row')}>
+                        <div className={cx('left')}></div>
 
-                <div className={cx('right')}>
-                    <h6 className={cx('username')}>Đổi mật khẩu</h6>
-                </div>
-            </div>
-            <div className={cx('row')}>
-                <div className={cx('left')}>
-                    <label htmlFor="currentPassword">Mật khẩu cũ</label>
-                </div>
-
-                <div className={cx('right')}>
-                    <input
-                        ref={currentPasswordRef}
-                        value={passwordInputs.inputs.currentPassword}
-                        onChange={handlePasswordInputsChange}
-                        name="currentPassword"
-                        type="password"
-                        id="currentPassword"
-                    />
-                </div>
-            </div>
-
-            <div className={cx('row')}>
-                <div className={cx('left')}>
-                    <label htmlFor="password">Mật khẩu mới</label>
-                </div>
-
-                <div className={cx('right')}>
-                    <input
-                        ref={passwordRef}
-                        value={passwordInputs.inputs.password}
-                        onChange={handlePasswordInputsChange}
-                        name="password"
-                        type="password"
-                        id="password"
-                    />
-                </div>
-            </div>
-
-            <div className={cx('row')}>
-                <div className={cx('left')}>
-                    <label htmlFor="confirmPassword">Xác nhận mật khẩu</label>
-                </div>
-
-                <div className={cx('right')}>
-                    <input
-                        ref={confirmPasswordRef}
-                        value={passwordInputs.inputs.confirmPassword}
-                        onChange={handlePasswordInputsChange}
-                        name="confirmPassword"
-                        type="password"
-                        id="confirmPassword"
-                    />
-                </div>
-            </div>
-
-            {passwordInputsError && (
-                <div className={cx('row')}>
-                    <div className={cx('left')}></div>
-
-                    <div className={cx('right')}>
-                        <div className={cx('feedback')}>{passwordInputsError}</div>
+                        <div className={cx('right')}>
+                            <h6 className={cx('username')}>Đổi mật khẩu</h6>
+                        </div>
                     </div>
-                </div>
+                    <div className={cx('row')}>
+                        <div className={cx('left')}>
+                            <label htmlFor="currentPassword">Mật khẩu cũ</label>
+                        </div>
+
+                        <div className={cx('right')}>
+                            <input
+                                ref={currentPasswordRef}
+                                value={passwordInputs.inputs.currentPassword}
+                                onChange={handlePasswordInputsChange}
+                                name="currentPassword"
+                                type="password"
+                                id="currentPassword"
+                            />
+                        </div>
+                    </div>
+
+                    <div className={cx('row')}>
+                        <div className={cx('left')}>
+                            <label htmlFor="password">Mật khẩu mới</label>
+                        </div>
+
+                        <div className={cx('right')}>
+                            <input
+                                ref={passwordRef}
+                                value={passwordInputs.inputs.password}
+                                onChange={handlePasswordInputsChange}
+                                name="password"
+                                type="password"
+                                id="password"
+                            />
+                        </div>
+                    </div>
+
+                    <div className={cx('row')}>
+                        <div className={cx('left')}>
+                            <label htmlFor="confirmPassword">Xác nhận mật khẩu</label>
+                        </div>
+
+                        <div className={cx('right')}>
+                            <input
+                                ref={confirmPasswordRef}
+                                value={passwordInputs.inputs.confirmPassword}
+                                onChange={handlePasswordInputsChange}
+                                name="confirmPassword"
+                                type="password"
+                                id="confirmPassword"
+                            />
+                        </div>
+                    </div>
+
+                    {passwordInputsError && (
+                        <div className={cx('row')}>
+                            <div className={cx('left')}></div>
+
+                            <div className={cx('right')}>
+                                <div className={cx('feedback')}>{passwordInputsError}</div>
+                            </div>
+                        </div>
+                    )}
+
+                    <div className={cx('row')}>
+                        <div className={cx('left')}></div>
+
+                        <div className={cx('right')}>
+                            <button
+                                onClick={handleChangePassword}
+                                className={cx('submit-btn', { formIsNotValid: !passwordInputs.passwordInputsValid })}
+                            >
+                                Đổi mật khẩu
+                            </button>
+                        </div>
+                    </div>
+                </>
             )}
-
-            <div className={cx('row')}>
-                <div className={cx('left')}></div>
-
-                <div className={cx('right')}>
-                    <button
-                        onClick={handleChangePassword}
-                        className={cx('submit-btn', { formIsNotValid: !passwordInputs.passwordInputsValid })}
-                    >
-                        Đổi mật khẩu
-                    </button>
-                </div>
-            </div>
 
             <ToastContainer
                 position="bottom-right"

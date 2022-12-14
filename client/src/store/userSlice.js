@@ -44,20 +44,6 @@ const userSlice = createSlice({
         replaceUserData(state, action) {
             state.currentUser = action.payload;
         },
-        // subscribe(state, action) {
-        //   // un
-        //   if (state.currentUser.subscribedUsers.includes(action.payload)) {
-        //     state.currentUser.subscribedUsers.splice(
-        //       state.currentUser.subscribedUsers.findIndex(
-        //         (channelId) => channelId === action.payload
-        //       ),
-        //       1
-        //     );
-        //     //sub
-        //   } else {
-        //     state.currentUser.subscribedUsers.push(action.payload);
-        //   }
-        // },
     },
 });
 
