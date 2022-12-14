@@ -1,10 +1,10 @@
 import React from 'react';
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
-import { format } from 'timeago.js';
 
 import styles from './Message.module.scss';
 import routes from '~/config/routes';
+import { format } from 'timeago.js';
 
 const cx = classNames.bind(styles);
 

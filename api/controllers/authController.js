@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const User = require('./../models/User');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/AppError');
+const Email = require('../utils/email');
 
 // Hàm tạo jsonwebtoken
 const generateToken = (id) => {
@@ -65,10 +66,7 @@ exports.register = catchAsync(async (req, res, next) => {
 
   user.password = undefined;
 
-  // await new Email(
-  //   user,
-  //   `${req.protocol}://${req.get('host')}/me`
-  // ).sendWelcome();
+  await new Email(user, process.env.DEV_DOMAIN).sendWelcome();
 
   await createAndSendToken(user, res, req, 201);
 });
@@ -155,7 +153,9 @@ exports.protect = catchAsync(async (req, res, next) => {
 // Change password
 exports.changePassword = catchAsync(async (req, res, next) => {
   const { currentPassword, password, confirmPassword } = req.body;
-  const user = await User.findOne({ email: req.user.email }).select('password');
+  const user = await User.findOne({ email: req.user.email }).select(
+    'password username email'
+  );
 
   if (!(await user.enteredPasswordIsCorrect(currentPassword, user.password))) {
     return next(new AppError('Mật khẩu không chính xác', 401));
@@ -164,6 +164,9 @@ exports.changePassword = catchAsync(async (req, res, next) => {
   user.password = password;
   user.confirmPassword = confirmPassword;
   await user.save();
+
+  console.log(user);
+  await new Email(user).sendChangePasswordSuccessfully();
 
   await createAndSendToken(user, res, req, 200);
 });
@@ -184,11 +187,9 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 
   // 3. Gửi reset password token to email của người dùng
   try {
-    const resetPasswordUrl = `${req.protocol}://${req.get(
-      'host'
-    )}/reset-password/${resetPasswordToken}`;
+    const resetPasswordUrl = `${process.env.DEV_DOMAIN}/reset-password/${resetPasswordToken}`;
 
-    // await new Email(user, resetPasswordUrl).sendResetPassword();
+    await new Email(user, resetPasswordUrl).sendResetPassword();
 
     // 4. Response
     res.status(200).json({
@@ -241,8 +242,16 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   user.confirmPassword = confirmPassword;
   user.resetPasswordToken = undefined;
   user.resetPasswordTokenExpiresIn = undefined;
-  await user.save();
-
-  // Log the user in
-  await createAndSendToken(user, res, req, 200);
+  try {
+    await user.save();
+    //send email
+    await new Email(user).sendChangePasswordSuccessfully();
+    // Log the user in
+    await createAndSendToken(user, res, req, 200);
+  } catch (error) {
+    res.status(500).json({
+      status: 'Lấy lại mật khẩu thất bại',
+      message: error.message,
+    });
+  }
 });

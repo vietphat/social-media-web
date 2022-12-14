@@ -82,13 +82,32 @@
                     flex: 1;
                     overflow-y: scroll;
 
-                    .loading {
-                        font-size: 3rem;
-                        font-weight: 700;
-                        text-align: center;
-                        margin-top: 4rem;
-                        opacity: 0.4;
+                    .loading-container {
+                        width: 100%;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+
+                        .loading {
+                            font-size: 3rem;
+                            font-weight: 700;
+                            margin-top: 4rem;
+                            opacity: 0.4;
+                            animation: spinner 0.8s linear infinite;
+                            color: rgba(22, 24, 35, 0.34);
+                        }
+
+                        @keyframes spinner {
+                            from {
+                                transform: translateY(-50%) rotate(0);
+                            }
+
+                            to {
+                                transform: translateY(-50%) rotate(360deg);
+                            }
+                        }
                     }
+
 
                     a {
                         margin: 1rem 1rem;

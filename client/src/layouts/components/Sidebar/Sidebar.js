@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClose } from '@fortawesome/free-solid-svg-icons';
+import { faClose, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { useRef } from 'react';
 import axios from 'axios';
 
@@ -136,7 +136,9 @@ const Sidebar = ({ classes }) => {
 
                             <div className={cx('search-results')}>
                                 {loading ? (
-                                    <div className={cx('loading')}>Đang tìm...</div>
+                                    <div className={cx('loading-container')}>
+                                        <FontAwesomeIcon className={cx('loading')} icon={faSpinner} />
+                                    </div>
                                 ) : (
                                     searchResults.map((result) => (
                                         <Link key={result._id} to={routes.profile.replace(':userId', result._id)}>

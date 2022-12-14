@@ -1,6 +1,9 @@
 import { Link, useNavigate } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import { useDispatch } from 'react-redux';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import React, { useState } from 'react';
 
 import httpRequest from '~/utils/httpRequest';
 import { loginStart, loginSuccess, loginFailed } from '~/store';
@@ -10,10 +13,13 @@ import routes from '~/config/routes';
 import { Button, Input } from '~/components/AuthForm';
 import images from '~/assets/images';
 import styles from './Register.module.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 const cx = classNames.bind(styles);
 
 const Register = () => {
+    const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
 
     const navigate = useNavigate();
@@ -44,6 +50,7 @@ const Register = () => {
         e.preventDefault();
 
         dispatch(loginStart());
+        setLoading(true);
         try {
             const res = await httpRequest.post('/auth/register', {
                 email: formState.inputs.email.value,
@@ -55,79 +62,119 @@ const Register = () => {
                 dispatch(loginSuccess({ currentUser: res.data.data, jwt: res.data.token }));
                 navigate('/');
             }
+            setLoading(false);
         } catch (error) {
+            let errorMessage = error.response.data.message;
+            if (errorMessage.startsWith('E11000')) {
+                errorMessage = 'Email này đã được sử dụng';
+            }
+            setLoading(false);
+            toast.error(`${errorMessage}`, {
+                position: 'bottom-right',
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'light',
+            });
             dispatch(loginFailed());
         }
     };
 
     return (
-        <div className={cx('wrapper')}>
-            <div className={cx('container')}>
-                <form className={cx('form')}>
-                    <div className={cx('logo-container')}>
-                        <Link to={routes.home}>
-                            <img src={images.logo} alt="Instagram Logo" />
-                        </Link>
-                    </div>
-                    <p className={cx('title')}>Đăng nhập để xem hình ảnh và video của bạn bè.</p>
+        <React.Fragment>
+            <div className={cx('wrapper')}>
+                <div className={cx('container')}>
+                    <form className={cx('form')}>
+                        <div className={cx('logo-container')}>
+                            <Link to={routes.home}>
+                                <img src={images.logo} alt="Instagram Logo" />
+                            </Link>
+                        </div>
+                        <p className={cx('title')}>Đăng nhập để xem hình ảnh và video của bạn bè.</p>
 
-                    <Button rounded className={cx('gmail-login-button')}>
-                        Đăng nhập bằng gmail
-                    </Button>
+                        <Button disabled={loading} rounded className={cx('gmail-login-button')}>
+                            Đăng nhập bằng gmail
+                        </Button>
 
-                    <div className={cx('separation-line')}>
-                        <hr className={cx('left-line')} />
-                        <span>HOẶC</span>
-                        <hr className={cx('right-line')} />
-                    </div>
+                        <div className={cx('separation-line')}>
+                            <hr className={cx('left-line')} />
+                            <span>HOẶC</span>
+                            <hr className={cx('right-line')} />
+                        </div>
 
-                    <div className={cx('form-controls')}>
-                        <Input
-                            validators={[VALIDATOR_REQUIRE()]}
-                            onInput={handleInputChange}
-                            placeholder="Tên người dùng"
-                            name="username"
-                            id="username"
-                        />
-                        <Input
-                            validators={[VALIDATOR_EMAIL()]}
-                            onInput={handleInputChange}
-                            placeholder="Email"
-                            name="email"
-                            id="email"
-                        />
-                        <Input
-                            validators={[VALIDATOR_REQUIRE()]}
-                            onInput={handleInputChange}
-                            placeholder="Mật khẩu"
-                            name="password"
-                            id="password"
-                            type="password"
-                        />
-                        <Input
-                            validators={[VALIDATOR_REQUIRE()]}
-                            onInput={handleInputChange}
-                            placeholder="Xác nhận mật khẩu"
-                            name="confirmPassword"
-                            id="confirmPassword"
-                            type="password"
-                        />
-                    </div>
+                        <div className={cx('form-controls')}>
+                            <Input
+                                validators={[VALIDATOR_REQUIRE()]}
+                                onInput={handleInputChange}
+                                placeholder="Tên người dùng"
+                                name="username"
+                                id="username"
+                            />
+                            <Input
+                                validators={[VALIDATOR_EMAIL()]}
+                                onInput={handleInputChange}
+                                placeholder="Email"
+                                name="email"
+                                id="email"
+                            />
+                            <Input
+                                validators={[VALIDATOR_REQUIRE()]}
+                                onInput={handleInputChange}
+                                placeholder="Mật khẩu"
+                                name="password"
+                                id="password"
+                                type="password"
+                            />
+                            <Input
+                                validators={[VALIDATOR_REQUIRE()]}
+                                onInput={handleInputChange}
+                                placeholder="Xác nhận mật khẩu"
+                                name="confirmPassword"
+                                id="confirmPassword"
+                                type="password"
+                            />
+                        </div>
 
-                    <p className={cx('description')}>
-                        Bằng cách nhấn đăng ký, bạn đồng ý với điều khoản, chính sách riêng tư và chấp nhận cookies.
-                    </p>
+                        <p className={cx('description')}>
+                            Bằng cách nhấn đăng ký, bạn đồng ý với điều khoản, chính sách riêng tư và chấp nhận cookies.
+                        </p>
 
-                    <Button onClick={handleRegister} disabled={!formState.isValid} className={cx('register-btn')}>
-                        Đăng ký
-                    </Button>
-                </form>
+                        {!loading ? (
+                            <Button
+                                onClick={handleRegister}
+                                disabled={!formState.isValid}
+                                className={cx('register-btn')}
+                            >
+                                Đăng ký
+                            </Button>
+                        ) : (
+                            <FontAwesomeIcon className={cx('loading')} icon={faSpinner} />
+                        )}
+                    </form>
 
-                <div className={cx('alternative-action-container')}>
-                    Đã có tài khoản <Link to={routes.login}>Đăng nhập ngay</Link>
+                    {!loading && (
+                        <div className={cx('alternative-action-container')}>
+                            Đã có tài khoản <Link to={routes.login}>Đăng nhập ngay</Link>
+                        </div>
+                    )}
                 </div>
             </div>
-        </div>
+            <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
+            />
+        </React.Fragment>
     );
 };
 

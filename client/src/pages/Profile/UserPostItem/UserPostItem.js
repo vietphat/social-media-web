@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 
 import { likePost, unlikePost } from '~/store';
-import { NotificationsIcon, CommentIcon, LikedIcon } from '~/components/Icons';
+import { NotificationsIcon, CommentIcon } from '~/components/Icons';
 import PostModal from '~/components/PostModal';
 import useModal from '~/hooks/useModal';
 import styles from './UserPostItem.module.scss';

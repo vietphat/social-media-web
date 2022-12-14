@@ -1,20 +1,18 @@
 import { useCallback, useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
-import { faImages } from '@fortawesome/free-solid-svg-icons';
+import { faImages, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDispatch, useSelector } from 'react-redux';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import axios from 'axios';
 import { createPost } from '~/store';
-import httpRequest from '~/utils/httpRequest';
 import app from '~/utils/firebase';
-import { useForm } from '~/hooks/useForm';
-import { VALIDATOR_REQUIRE } from '~/utils/validators';
 import routes from '~/config/routes';
-import styles from './UploaddPost.module.scss';
-import { Input } from '../AuthForm';
+import styles from './UploadPost.module.scss';
 
 const cx = classNames.bind(styles);
 
@@ -26,15 +24,8 @@ const UploadPost = () => {
     const [mediaFiles, setMediaFiles] = useState();
     const [mediaUrls, setMediaUrls] = useState([]);
     const [uploadedFilesSuccessfully, setUploadFilesSuccessfully] = useState(false);
-    const [formState, handleInputChange] = useForm(
-        {
-            description: {
-                value: '',
-                isValid: false,
-            },
-        },
-        false,
-    );
+    const [description, setDescription] = useState('');
+    const [fileIsBeingUploaded, setFileIsBeingUploaded] = useState(false);
 
     const handleChangeMediaFilesUpload = (e) => {
         if (e.target.files?.length > 0) {
@@ -46,6 +37,8 @@ const UploadPost = () => {
         (files) => {
             const storage = getStorage(app);
 
+            setFileIsBeingUploaded(true);
+            let fileCount = 0;
             Array.from(files).forEach((file, index) => {
                 const fileName = new Date().getTime() + file.name;
                 const storageRef = ref(storage, 'posts/media/' + fileName);
@@ -56,12 +49,16 @@ const UploadPost = () => {
                 // 1. 'state_changed' observer, called any time the state changes
                 // 2. Error observer, called on failure
                 // 3. Completion observer, called on successful completion
+
                 uploadTask.on(
                     'state_changed',
                     (snapshot) => {
                         // Observe state change events such as progress, pause, and resume
                         // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
                         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        if (progress === 100) fileCount++;
+                        setUploadFilesSuccessfully(progress === 100 && fileCount === files.length);
+                        setFileIsBeingUploaded(!(fileCount === files.length));
 
                         switch (snapshot.state) {
                             case 'paused':
@@ -83,7 +80,6 @@ const UploadPost = () => {
                         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
                             // setUploadMediaSuccessfully(true);
                             setMediaUrls((prev) => prev.concat(downloadURL));
-                            setUploadFilesSuccessfully(index === files.length - 1);
                         });
                     },
                 );
@@ -100,7 +96,7 @@ const UploadPost = () => {
         const res = await axios.post(
             'http://localhost:8800/api/posts/create',
             {
-                description: formState.inputs.description.value,
+                description,
                 mediaUrls: mediaUrls,
             },
             {
@@ -109,6 +105,19 @@ const UploadPost = () => {
         );
 
         if (res.status === 201) {
+            toast.success('Đăng bài thành công!', {
+                position: 'bottom-right',
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'dark',
+            });
+            setDescription('');
+            setMediaFiles(null);
+            setMediaUrls([]);
             dispatch(createPost(res.data.data));
         }
     };
@@ -120,31 +129,49 @@ const UploadPost = () => {
                     <img src={user.currentUser.avatarUrl} alt="avatar" />
                 </Link>
 
-                <Input
-                    onInput={handleInputChange}
-                    validators={[VALIDATOR_REQUIRE]}
+                <input
+                    onChange={(e) => setDescription(e.target.value)}
+                    value={description}
                     type="text"
                     placeholder="Bạn đang nghĩ gì?"
                     id="description"
                 />
             </div>
             <div className={cx('bottom')}>
-                <label>
-                    <input
-                        onChange={handleChangeMediaFilesUpload}
-                        type="file"
-                        id="mediaUrls"
-                        accept="image/*, video/*"
-                        multiple
-                    />
-                    <FontAwesomeIcon icon={faImages} />
-                    <span>Hình/video</span>
-                </label>
+                {!fileIsBeingUploaded ? (
+                    <label>
+                        <input
+                            onChange={handleChangeMediaFilesUpload}
+                            type="file"
+                            id="mediaUrls"
+                            accept="image/*, video/*"
+                            multiple
+                        />
+                        <FontAwesomeIcon icon={faImages} />
+                        <span>Hình/video</span>
+                    </label>
+                ) : (
+                    <div className={cx('loading-container')}>
+                        <FontAwesomeIcon className={cx('loading')} icon={faSpinner} />
+                    </div>
+                )}
 
-                {formState.isValid && mediaUrls.length > 0 && uploadedFilesSuccessfully && (
+                {description?.length > 0 && mediaUrls.length > 0 && uploadedFilesSuccessfully && (
                     <button onClick={handleCreatePost}>Đăng</button>
                 )}
             </div>
+            <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
+            />
         </div>
     );
 };

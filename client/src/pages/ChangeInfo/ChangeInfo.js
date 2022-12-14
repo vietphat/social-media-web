@@ -3,10 +3,11 @@ import classNames from 'classnames/bind';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { logout, replaceUserData } from '~/store';
 import styles from './ChangeInfo.module.scss';
-import routes from '~/config/routes';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import app from '~/utils/firebase';
 import { useEffect } from 'react';
@@ -145,6 +146,16 @@ const ChangeInfo = () => {
 
             if (res.status === 200) {
                 // navigate(routes.profile.replace(':userId', res.data.data._id));
+                toast.success('Cập nhật thông tin thành công!', {
+                    position: 'bottom-right',
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'dark',
+                });
                 dispatch(replaceUserData(res.data.data));
             }
         } catch (error) {
@@ -169,6 +180,16 @@ const ChangeInfo = () => {
             );
 
             if (res.status === 200) {
+                toast.success('Cập nhật thông tin thành công!', {
+                    position: 'bottom-right',
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'dark',
+                });
                 await axios.get('http://localhost:8800/api/auth/signout');
                 dispatch(logout());
             } else {
@@ -356,6 +377,19 @@ const ChangeInfo = () => {
                     </button>
                 </div>
             </div>
+
+            <ToastContainer
+                position="bottom-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
+            />
         </div>
     );
 };

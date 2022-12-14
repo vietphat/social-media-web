@@ -18,7 +18,6 @@ const cx = classNames.bind(styles);
 
 const PostItem = (props) => {
     const user = useSelector((state) => state.user);
-    const posts = useSelector((state) => state.timeline.posts);
     const [likedUserCardListShown, setLikedUserCardListShown] = useState(false);
     const [isLikedPost, setIsLikedPost] = useState(
         props.post.likes.findIndex((like) => like._id === user.currentUser._id) !== -1,
